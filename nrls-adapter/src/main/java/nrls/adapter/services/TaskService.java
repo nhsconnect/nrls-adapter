@@ -36,6 +36,7 @@ public class TaskService {
 			}
 		}
 
+        FileHelper.archiveFile(taskFileLocation);
 	}
 
 }

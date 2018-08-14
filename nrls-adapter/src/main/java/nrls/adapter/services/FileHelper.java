@@ -11,6 +11,8 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.ObjectInputStream;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import org.jboss.logging.Logger;
 import org.springframework.stereotype.Service;
@@ -21,12 +23,12 @@ public class FileHelper {
     private static final Logger LOG = Logger.getLogger(FileHelper.class);
     private FileReader reader;
     private ObjectInputStream inputStream;
-    
+
     public static boolean writeObjectToFileAsXML(String filePath, Object object) {
-        
+
         boolean success = true;
         FileWriter fileWriter = null;
-        
+
         try {
             File file = new File(filePath);
             file.getParentFile().mkdirs();
@@ -46,36 +48,55 @@ public class FileHelper {
                 success = false;
             }
         }
-        
+
         return success;
     }
-    
+
     public ObjectInputStream getObjectInputStream(String filePath) {
-    	
-		try {
-			reader = new FileReader(filePath);
-			XStream xstream = new XStream(new StaxDriver());
-			xstream.alias("Task", Task.class);
-			xstream.processAnnotations(Task.class);
-			inputStream =  xstream.createObjectInputStream(reader);
-			
-		} catch (FileNotFoundException fileNotFoundEx) {
-			LOG.error("Error opening File: " + fileNotFoundEx.getMessage());
-		} catch (IOException openingInputStreamEx) {
-			LOG.error("Error opening Input Stream: " + openingInputStreamEx.getMessage());
-		}
-		
-		return inputStream;
+
+        try {
+            reader = new FileReader(filePath);
+            XStream xstream = new XStream(new StaxDriver());
+            xstream.alias("Task", Task.class);
+            xstream.processAnnotations(Task.class);
+            inputStream = xstream.createObjectInputStream(reader);
+
+        } catch (FileNotFoundException fileNotFoundEx) {
+            LOG.error("Error opening File: " + fileNotFoundEx.getMessage());
+        } catch (IOException openingInputStreamEx) {
+            LOG.error("Error opening Input Stream: " + openingInputStreamEx.getMessage());
+        }
+
+        return inputStream;
+    }
+
+    public void closeFile() {
+        try {
+            inputStream.close();
+            reader.close();
+        } catch (IOException closeStreamEx) {
+            // TODO Auto-generated catch block
+            LOG.error("Error closing Input Stream: " + closeStreamEx.getMessage());
+        }
+    }
+
+    public static void archiveFile(String filePath) {
+
+        File fromFile = new File(filePath);
+        String fileName = fromFile.getName();
+
+        String newFilePath = filePath.replace(fileName, "archive/" + fileName + "_" + formatCurrentDate());
+        File toFile = new File(newFilePath);
+        toFile.getParentFile().mkdirs();
+
+        if (!fromFile.renameTo(toFile)) {
+            LOG.error("Error archiving Tasks file (" + filePath + ")");
+        }
     }
     
-    public void closeFile() {
-    	try {
-    		inputStream.close();
-			reader.close();
-		} catch (IOException closeStreamEx) {
-			// TODO Auto-generated catch block
-			LOG.error("Error closing Input Stream: " + closeStreamEx.getMessage());
-		}
+    public static String formatCurrentDate(){
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss-SSS");
+        return simpleDateFormat.format(new Date());
     }
 
 }
