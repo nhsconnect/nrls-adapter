@@ -19,6 +19,8 @@ import org.springframework.stereotype.Service;
 public class FileHelper {
 
     private static final Logger LOG = Logger.getLogger(FileHelper.class);
+    private FileReader reader;
+    private ObjectInputStream inputStream;
     
     public static boolean writeObjectToFileAsXML(String filePath, Object object) {
         
@@ -50,8 +52,6 @@ public class FileHelper {
     
     public ObjectInputStream getObjectInputStream(String filePath) {
     	
-    	FileReader reader;
-    	ObjectInputStream inputStream = null;
 		try {
 			reader = new FileReader(filePath);
 			XStream xstream = new XStream(new StaxDriver());
@@ -66,6 +66,16 @@ public class FileHelper {
 		}
 		
 		return inputStream;
+    }
+    
+    public void closeFile() {
+    	try {
+    		inputStream.close();
+			reader.close();
+		} catch (IOException closeStreamEx) {
+			// TODO Auto-generated catch block
+			LOG.error("Error closing Input Stream: " + closeStreamEx.getMessage());
+		}
     }
 
 }

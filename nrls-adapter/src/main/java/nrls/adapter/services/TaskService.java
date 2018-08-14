@@ -25,13 +25,14 @@ public class TaskService {
 
 		ObjectInputStream in = fileHelper.getObjectInputStream(taskFileLocation);
 
-		boolean isEmpty = true;
-		while (isEmpty) {
+		boolean isEmpty = false;
+		while (!isEmpty) {
 			try {
 				Task task = (Task) in.readObject();
 				System.out.println(task);
 			} catch (EOFException e) {
-				isEmpty = false;
+				isEmpty = true;
+				fileHelper.closeFile();
 			}
 		}
 
