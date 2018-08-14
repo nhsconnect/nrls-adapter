@@ -17,9 +17,9 @@ public class Task {
 	@XStreamAlias("content")
 	private Content content;
 	@XStreamAlias("Action")
-	private String Action;
+	private String action;
 	@XStreamAlias("PointerMasterIdentifier")
-	private String PointerMasterIdentifier;
+	private String pointerMasterIdentifier;
 
 	public String getStatus() {
 		return status;
@@ -70,19 +70,19 @@ public class Task {
 	}
 
 	public String getAction() {
-		return Action;
+		return action;
 	}
 
-	public void setAction(String Action) {
-		this.Action = Action;
+	public void setAction(String action) {
+		this.action = action;
 	}
 
 	public String getPointerMasterIdentifier() {
-		return PointerMasterIdentifier;
+		return pointerMasterIdentifier;
 	}
 
-	public void setPointerMasterIdentifier(String PointerMasterIdentifier) {
-		this.PointerMasterIdentifier = PointerMasterIdentifier;
+	public void setPointerMasterIdentifier(String pointerMasterIdentifier) {
+		this.pointerMasterIdentifier = pointerMasterIdentifier;
 	}
 
 }

@@ -1,15 +1,18 @@
 package nrls.adapter.model;
 
+import com.thoughtworks.xstream.annotations.XStreamAlias;
+
 public class Subject {
 
-	private String NHSNumber;
+	@XStreamAlias("NHSNumber")
+	private String nhsNumber;
 
 	public String getNhsNumber() {
-		return NHSNumber;
+		return nhsNumber;
 	}
 
-	public void setNhsNumber(String NHSNumber) {
-		this.NHSNumber = NHSNumber;
+	public void setNhsNumber(String nhsNumber) {
+		this.nhsNumber = nhsNumber;
 	}
 
 }

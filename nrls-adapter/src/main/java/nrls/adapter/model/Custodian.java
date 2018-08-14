@@ -1,15 +1,18 @@
 package nrls.adapter.model;
 
+import com.thoughtworks.xstream.annotations.XStreamAlias;
+
 public class Custodian {
 
-	private String OdsCode;
+	@XStreamAlias("OdsCode")
+	private String odsCode;
 
 	public String getOdsCode() {
-		return OdsCode;
+		return odsCode;
 	}
 
-	public void setOdsCode(String OdsCode) {
-		this.OdsCode = OdsCode;
+	public void setOdsCode(String odsCode) {
+		this.odsCode = odsCode;
 	}
 
 }

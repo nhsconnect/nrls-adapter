@@ -1,18 +1,22 @@
 package nrls.adapter.model;
 
+import com.thoughtworks.xstream.annotations.XStreamAlias;
+
 public class Attachment {
 
-	private String ContentType;
+	@XStreamAlias("ContentType")
+	private String contentType;
 	private String url;
 	private String title;
-	private String Creation;
+	@XStreamAlias("Creation")
+	private String creation;
 
 	public String getContentType() {
-		return ContentType;
+		return contentType;
 	}
 
-	public void setContentType(String ContentType) {
-		this.ContentType = ContentType;
+	public void setContentType(String contentType) {
+		this.contentType = contentType;
 	}
 
 	public String getUrl() {
@@ -32,11 +36,11 @@ public class Attachment {
 	}
 
 	public String getCreation() {
-		return Creation;
+		return creation;
 	}
 
-	public void setCreation(String Creation) {
-		this.Creation = Creation;
+	public void setCreation(String creation) {
+		this.creation = creation;
 	}
 
 }

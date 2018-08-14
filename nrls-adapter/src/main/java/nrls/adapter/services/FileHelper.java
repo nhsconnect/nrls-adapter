@@ -3,7 +3,6 @@ package nrls.adapter.services;
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.xml.StaxDriver;
 
-import nrls.adapter.model.Subject;
 import nrls.adapter.model.Task;
 
 import java.io.File;
@@ -57,7 +56,7 @@ public class FileHelper {
 			reader = new FileReader(filePath);
 			XStream xstream = new XStream(new StaxDriver());
 			xstream.alias("Task", Task.class);
-			xstream.alias("subject", Subject.class);
+			xstream.processAnnotations(Task.class);
 			inputStream =  xstream.createObjectInputStream(reader);
 			
 		} catch (FileNotFoundException fileNotFoundEx) {
