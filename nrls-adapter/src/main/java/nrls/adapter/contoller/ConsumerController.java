@@ -30,12 +30,11 @@ public class ConsumerController {
 	@ResponseBody
 	public ResponseEntity<?> getCount(@RequestParam(name = "sessionId", required = true) String sessionId,
 			@RequestParam(name = "userId", required = true) String userId,
-			@RequestParam(name = "nhsNumber", required = true) String nhsNumber,
-			@RequestParam(name = "pointerType", required = false) String pointerType) {
+			@RequestParam(name = "nhsNumber", required = true) String nhsNumber) {
 
 		// Do something with the request
 		
-		return new ResponseEntity<>(new EprRequest(sessionId, userId, nhsNumber, pointerType), HttpStatus.OK);
+		return new ResponseEntity<>(new EprRequest(sessionId, userId, nhsNumber), HttpStatus.OK);
 	}
 
 }

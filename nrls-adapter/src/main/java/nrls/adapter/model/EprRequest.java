@@ -6,8 +6,14 @@ public class EprRequest {
 	private String NHSNumber;
 	private String PointerType;
 
+    public EprRequest(String sessionId, String userId, String nHSNumber) {
+		SessionId = sessionId;
+		UserId = userId;
+		NHSNumber = nHSNumber;
+		PointerType = null;
+	}
+        
 	public EprRequest(String sessionId, String userId, String nHSNumber, String pointerType) {
-		super();
 		SessionId = sessionId;
 		UserId = userId;
 		NHSNumber = nHSNumber;
