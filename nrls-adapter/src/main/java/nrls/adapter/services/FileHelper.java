@@ -1,11 +1,22 @@
 package nrls.adapter.services;
 
 import com.thoughtworks.xstream.XStream;
+import com.thoughtworks.xstream.io.xml.StaxDriver;
+
+import nrls.adapter.model.Subject;
+import nrls.adapter.model.Task;
+
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import org.jboss.logging.Logger;
+import java.io.ObjectInputStream;
 
+import org.jboss.logging.Logger;
+import org.springframework.stereotype.Service;
+
+@Service
 public class FileHelper {
 
     private static final Logger LOG = Logger.getLogger(FileHelper.class);
@@ -36,6 +47,26 @@ public class FileHelper {
         }
         
         return success;
+    }
+    
+    public ObjectInputStream getObjectInputStream(String filePath) {
+    	
+    	FileReader reader;
+    	ObjectInputStream inputStream = null;
+		try {
+			reader = new FileReader(filePath);
+			XStream xstream = new XStream(new StaxDriver());
+			xstream.alias("Task", Task.class);
+			xstream.alias("subject", Subject.class);
+			inputStream =  xstream.createObjectInputStream(reader);
+			
+		} catch (FileNotFoundException fileNotFoundEx) {
+			LOG.error("Error opening File: " + fileNotFoundEx.getMessage());
+		} catch (IOException openingInputStreamEx) {
+			LOG.error("Error opening Input Stream: " + openingInputStreamEx.getMessage());
+		}
+		
+		return inputStream;
     }
 
 }
