@@ -1,55 +1,56 @@
 package nrls.adapter.model;
 
 public class EprRequest {
-	private String SessionId;
-	private String UserId;
-	private String NHSNumber;
-	private String PointerType;
+
+    private String SessionId;
+    private String UserId;
+    private String NHSNumber;
+    private String PointerType;
 
     public EprRequest(String sessionId, String userId, String nHSNumber) {
-		SessionId = sessionId;
-		UserId = userId;
-		NHSNumber = nHSNumber;
-		PointerType = null;
-	}
-        
-	public EprRequest(String sessionId, String userId, String nHSNumber, String pointerType) {
-		SessionId = sessionId;
-		UserId = userId;
-		NHSNumber = nHSNumber;
-		PointerType = pointerType;
-	}
+        SessionId = sessionId;
+        UserId = userId;
+        NHSNumber = nHSNumber;
+        PointerType = null;
+    }
 
-	public String getSessionId() {
-		return SessionId;
-	}
+    public EprRequest(String sessionId, String userId, String nHSNumber, String pointerType) {
+        SessionId = sessionId;
+        UserId = userId;
+        NHSNumber = nHSNumber;
+        PointerType = pointerType;
+    }
 
-	public void setSessionId(String sessionId) {
-		SessionId = sessionId;
-	}
+    public String getSessionId() {
+        return SessionId;
+    }
 
-	public String getUserId() {
-		return UserId;
-	}
+    public void setSessionId(String sessionId) {
+        SessionId = sessionId;
+    }
 
-	public void setUserId(String userId) {
-		UserId = userId;
-	}
+    public String getUserId() {
+        return UserId;
+    }
 
-	public String getNHSNumber() {
-		return NHSNumber;
-	}
+    public void setUserId(String userId) {
+        UserId = userId;
+    }
 
-	public void setNHSNumber(String nHSNumber) {
-		NHSNumber = nHSNumber;
-	}
+    public String getNHSNumber() {
+        return NHSNumber;
+    }
 
-	public String getPointerType() {
-		return PointerType;
-	}
+    public void setNHSNumber(String nHSNumber) {
+        NHSNumber = nHSNumber;
+    }
 
-	public void setPointerType(String pointerType) {
-		PointerType = pointerType;
-	}
+    public String getPointerType() {
+        return PointerType;
+    }
+
+    public void setPointerType(String pointerType) {
+        PointerType = pointerType;
+    }
 
 }

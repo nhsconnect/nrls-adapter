@@ -18,7 +18,7 @@ public class ConsumerController {
 	@ResponseBody
 	public ResponseEntity<?> getPointers(@RequestParam(name = "sessionId", required = true) String sessionId,
 			@RequestParam(name = "userId", required = true) String userId,
-			@RequestParam(name = "userId", required = true) String nhsNumber,
+			@RequestParam(name = "nhsNumber", required = true) String nhsNumber,
 			@RequestParam(name = "pointerType", required = false) String pointerType) {
 		
 		// Do something with the request
