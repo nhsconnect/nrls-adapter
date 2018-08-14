@@ -22,6 +22,13 @@ public class AuditEntity {
     private String nrlsRequest;         // Request sent by the adapter to the NRLS
     private String nrlsResponse;        // Response recieved by the adapter from the NRLS
     
+    public void setConsumerRequestData(RequestType p_type, String p_nhsNumber, String p_userId, String p_sessionId, String p_nrlsAdapterRequest){
+        type = p_type;
+        nhsNumber = p_nhsNumber;
+        userId = p_userId;
+        id = p_sessionId;
+        nrlsAdapterRequest = p_nrlsAdapterRequest;
+    }
 
     public AuditEntity(String id){
         transactionId = id;

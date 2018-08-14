@@ -35,7 +35,7 @@ public class Audit {
         return auditEntity;
     }
 
-    public boolean saveAuditEntity(String id, RequestType type) {
+    public boolean saveAuditEntity(String id) {
         
         AuditEntity auditEntity = auditEntities.get(id);
         
@@ -51,7 +51,7 @@ public class Audit {
             
             // Store the audit entry to a file
             String filePath;
-            if(type == RequestType.CONSUMER){
+            if(RequestType.CONSUMER == auditEntity.getType()){
                 filePath = auditPathConsumer + auditEntity.getNhsNumber() + "_Consumer_" + simpleDateFormat.format(auditEntity.getDateLogged()) + "_" + auditEntity.getTransactionId() + ".xml";
             } else {
                 filePath = auditPathProvider + auditEntity.getNhsNumber() + "_Provider_" + simpleDateFormat.format(auditEntity.getDateLogged()) + "_" + auditEntity.getTransactionId() + ".xml";
