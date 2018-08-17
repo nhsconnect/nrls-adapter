@@ -14,36 +14,41 @@ import nrls.adapter.model.task.Task;
 @Component
 public class TaskService {
 
-	@Autowired
-	FileHelper fileHelper;
-	
-	@Autowired
-	private RequestService requestService;
+    @Autowired
+    FileHelper fileHelper;
 
-	@Value("${task.file.location}")
-	private String taskFileLocation;
+    @Autowired
+    private RequestService requestService;
 
-	@Scheduled(cron = "${task.schedule.cron}")
-	public void extractTask() throws ClassNotFoundException, IOException {
+    @Value("${task.file.location}")
+    private String taskFileLocation;
 
-		ObjectInputStream in = fileHelper.getObjectInputStream(taskFileLocation);
+    @Scheduled(cron = "${task.schedule.cron}")
+    public void extractTask() throws ClassNotFoundException, IOException {
 
-		boolean isEmpty = false;
-		while (!isEmpty) {
-			try {
-				Task task = (Task) in.readObject();
-				if (task.getAction().equals("Create")) {
-					System.out.println(requestService.performPost(task).getStatusCodeValue());
-				} else {
-					System.out.println(requestService.performDelete(task).getStatusCodeValue());
-				}
-			} catch (EOFException e) {
-				isEmpty = true;
-				fileHelper.closeFile();
-			}
-		}
+        ObjectInputStream in = fileHelper.getObjectInputStream(taskFileLocation);
 
-		FileHelper.archiveFile(taskFileLocation);
-	}
+        boolean isEmpty = false;
+        while (!isEmpty) {
+            try {
+                Task task = (Task) in.readObject();
+                try {
+                    if (task.getAction().equals("Create")) {
+                        System.out.println(requestService.performPost(task).getStatusCodeValue());
+                    } else {
+                        System.out.println(requestService.performDelete(task).getStatusCodeValue());
+                    }
+                } catch (Exception ex) {
+                    System.err.println("Error processing task: " + ex.getMessage());
+                    // Log error
+                }
+            } catch (EOFException e) {
+                isEmpty = true;
+                fileHelper.closeFile();
+            }
+        }
+
+        FileHelper.archiveFile(taskFileLocation);
+    }
 
 }

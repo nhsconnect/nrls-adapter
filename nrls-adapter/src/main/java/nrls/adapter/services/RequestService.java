@@ -38,6 +38,9 @@ public class RequestService {
 	@Value("${nrls.api.delete.pointer.system}")
 	private String nrlsDeletePointersSystem;
 
+    @Autowired
+    private DocumentReferenceService documentReferenceService;
+    
 	private RestTemplate restTemplate;
 
 	@Autowired
@@ -49,20 +52,20 @@ public class RequestService {
 	}
 
 	// Provider Requests
-	public ResponseEntity<?> performPost(Task task) {
+	public ResponseEntity<?> performPost(Task task) throws Exception {
 		System.out.println(task);
-		System.out.println(new DocumentReference().convertTaskToDocumentReference(task));
+		System.out.println(documentReferenceService.convertTaskToDocumentReference(task));
 		HttpEntity<DocumentReference> request = new HttpEntity<>(
-				new DocumentReference().convertTaskToDocumentReference(task), headerGenerator.generateSecurityHeaders("write", "EXP001", null));
+                documentReferenceService.convertTaskToDocumentReference(task), headerGenerator.generateSecurityHeaders("write", "EXP001", null));
 		ResponseEntity<String> response = restTemplate.exchange(nrlsPostPointerUrl, HttpMethod.POST, request,
 				String.class);
 		return response;
 	}
 
 	// Delete by ‘masterIdentifier’
-	public ResponseEntity<?> performDelete(Task task) {
+	public ResponseEntity<?> performDelete(Task task) throws Exception {
 		System.out.println(task);
-		System.out.println(new DocumentReference().convertTaskToDocumentReference(task));
+		System.out.println(documentReferenceService.convertTaskToDocumentReference(task));
 		HttpEntity<DocumentReference> request = new HttpEntity<>(headerGenerator.generateSecurityHeaders("write", "AMS01", null));
 		// [baseUrl]/DocumentReference?subject=[https://demographics.spineservices.nhs.uk/STU3/Patient/[nhsNumber]&identifier=[system]|[value]
 		String url = nrlsGetPointersUrl + nrlsGetPointersUrlSubject + task.getSubject().getNhsNumber()
@@ -81,7 +84,6 @@ public class RequestService {
 		ResponseEntity<String> response = restTemplate.exchange(url + eprRequest.getNHSNumber(), HttpMethod.GET,
 				request, String.class);
 		return response;
-
 	}
 
 }

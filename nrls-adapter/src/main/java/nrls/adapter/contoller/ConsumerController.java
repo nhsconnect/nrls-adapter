@@ -53,8 +53,7 @@ public class ConsumerController {
 		auditEntity.setConsumerRequestData(RequestType.CONSUMER, nhsNumber, userId, sessionId,
 				request.getRequestURL() + "?" + request.getQueryString());
 
-		ResponseEntity<?> response = requestService.performGet(new EprRequest(sessionId, userId, nhsNumber, pointerType),
-				false);
+		ResponseEntity<?> response = requestService.performGet(new EprRequest(sessionId, userId, nhsNumber, pointerType), false);
 		auditEntity.setNrlsAdapterResponse(xstream.toXML(response));
 
 		audit.saveAuditEntity(sessionId);

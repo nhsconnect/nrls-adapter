@@ -102,28 +102,4 @@ public class DocumentReference {
 		this.masterIdentifier = masterIdentifier;
 	}
 
-	public DocumentReference convertTaskToDocumentReference(Task task) {
-		DocumentReference documentRef = new DocumentReference();
-		documentRef.masterIdentifier = new MasterIdentifier();
-		// pull system from config.
-		documentRef.masterIdentifier.setSystem("Random");
-		documentRef.masterIdentifier.setValue(task.getPointerMasterIdentifier());;
-		documentRef.resourceType = "DocumentReference";
-		documentRef.status = task.getStatus();
-		// Finish this off
-		documentRef.type = task.getType();
-		documentRef.subject = new Subject();
-		documentRef.subject.setReference(
-				"https://demographics.spineservices.nhs.uk/STU3/Patient/" + task.getSubject().getNhsNumber());
-		documentRef.indexed = new Date().toGMTString();
-		documentRef.author = new Author();
-		documentRef.author.setReference(
-				"https://directory.spineservices.nhs.uk/STU3/Organization/" + task.getAuthor().getOdsCode());
-		documentRef.custodian = new Custodian();
-		documentRef.custodian.setReference(
-				"https://directory.spineservices.nhs.uk/STU3/Organization/" + task.getCustodian().getOdsCode());
-		documentRef.content = task.getContent();
-		return documentRef;
-	}
-
 }
