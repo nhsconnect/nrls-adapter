@@ -1,4 +1,4 @@
-package nrls.adapter.model;
+package nrls.adapter.model.task;
 
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 

@@ -3,7 +3,7 @@ package nrls.adapter.services;
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.xml.StaxDriver;
 
-import nrls.adapter.model.Task;
+import nrls.adapter.model.task.Task;
 
 import java.io.File;
 import java.io.FileNotFoundException;

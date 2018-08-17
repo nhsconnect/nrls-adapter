@@ -9,13 +9,16 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-import nrls.adapter.model.Task;
+import nrls.adapter.model.task.Task;
 
 @Component
 public class TaskService {
 
 	@Autowired
 	FileHelper fileHelper;
+	
+	@Autowired
+	private RequestService requestService;
 
 	@Value("${task.file.location}")
 	private String taskFileLocation;
@@ -29,14 +32,18 @@ public class TaskService {
 		while (!isEmpty) {
 			try {
 				Task task = (Task) in.readObject();
-				System.out.println(task);
+				if (task.getAction().equals("Create")) {
+					System.out.println(requestService.performPost(task).getStatusCodeValue());
+				} else {
+					System.out.println(requestService.performDelete(task).getStatusCodeValue());
+				}
 			} catch (EOFException e) {
 				isEmpty = true;
 				fileHelper.closeFile();
 			}
 		}
 
-        FileHelper.archiveFile(taskFileLocation);
+		FileHelper.archiveFile(taskFileLocation);
 	}
 
 }

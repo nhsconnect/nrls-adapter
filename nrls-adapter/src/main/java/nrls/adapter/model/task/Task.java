@@ -1,4 +1,4 @@
-package nrls.adapter.model;
+package nrls.adapter.model.task;
 
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 
@@ -20,6 +20,13 @@ public class Task {
 	private String action;
 	@XStreamAlias("PointerMasterIdentifier")
 	private String pointerMasterIdentifier;
+
+	@Override
+	public String toString() {
+		return "Task [status=" + status + ", type=" + type + ", subject=" + subject + ", author=" + author
+				+ ", custodian=" + custodian + ", content=" + content + ", action=" + action
+				+ ", pointerMasterIdentifier=" + pointerMasterIdentifier + "]";
+	}
 
 	public String getStatus() {
 		return status;

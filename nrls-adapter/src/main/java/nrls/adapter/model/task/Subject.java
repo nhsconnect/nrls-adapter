@@ -1,4 +1,4 @@
-package nrls.adapter.model;
+package nrls.adapter.model.task;
 
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 
@@ -13,6 +13,11 @@ public class Subject {
 
 	public void setNhsNumber(String nhsNumber) {
 		this.nhsNumber = nhsNumber;
+	}
+
+	@Override
+	public String toString() {
+		return "Subject [nhsNumber=" + nhsNumber + "]";
 	}
 
 }
