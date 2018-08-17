@@ -38,7 +38,7 @@ public class DocumentReferenceService {
             documentRef.setType(task.getType());
         }
         
-        if(!NhsCodeValidator.nhsNumberValid(task.getSubject().getNhsNumber())){
+        if(!Validators.nhsNumberValid(task.getSubject().getNhsNumber())){
             throw new Exception("The NHS Number is not valid");
         }
         

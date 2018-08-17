@@ -1,6 +1,6 @@
 package nrls.adapter.services;
 
-public final class NhsCodeValidator {
+public final class Validators {
     
     public static boolean nhsNumberValid(String nhsNumber) {
 
