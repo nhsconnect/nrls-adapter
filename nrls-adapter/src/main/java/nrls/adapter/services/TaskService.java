@@ -32,19 +32,18 @@ public class TaskService {
         while (!isEmpty) {
             try {
                 Task task = (Task) in.readObject();
-                try {
-                    if (task.getAction().equals("Create")) {
-                        System.out.println(requestService.performPost(task).getStatusCodeValue());
-                    } else {
-                        System.out.println(requestService.performDelete(task).getStatusCodeValue());
-                    }
-                } catch (Exception ex) {
-                    System.err.println("Error processing task: " + ex.getMessage());
-                    // Log error
+                if (task.getAction().equals("Create")) {
+                    System.out.println(requestService.performPost(task).getStatusCodeValue());
+                } else {
+                    System.out.println(requestService.performDelete(task).getStatusCodeValue());
                 }
             } catch (EOFException e) {
                 isEmpty = true;
                 fileHelper.closeFile();
+            } catch (Exception ex) {
+                // Error which is not the end of the file
+                System.err.println("Error processing task: " + ex.getMessage());
+                // Log error
             }
         }
 

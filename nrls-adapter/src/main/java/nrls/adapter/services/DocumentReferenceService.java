@@ -38,6 +38,10 @@ public class DocumentReferenceService {
             documentRef.setType(task.getType());
         }
         
+        if(!NhsCodeValidator.nhsNumberValid(task.getSubject().getNhsNumber())){
+            throw new Exception("The NHS Number is not valid");
+        }
+        
         Subject subject = new Subject();
         subject.setReference("https://demographics.spineservices.nhs.uk/STU3/Patient/" + task.getSubject().getNhsNumber());
 		documentRef.setSubject(subject);
