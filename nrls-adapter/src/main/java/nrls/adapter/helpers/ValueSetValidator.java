@@ -64,6 +64,8 @@ public class ValueSetValidator {
                     break;
                 }
             }
+        } else {
+            codingValid = false;
         }
 
         return codingValid;
