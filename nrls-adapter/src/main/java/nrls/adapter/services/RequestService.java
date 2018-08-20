@@ -12,19 +12,10 @@ import org.springframework.web.client.RestTemplate;
 
 import com.thoughtworks.xstream.XStream;
 
-import ca.uhn.fhir.context.FhirContext;
 import nrls.adapter.model.AuditEntity;
 import nrls.adapter.model.EprRequest;
 
 import org.hl7.fhir.dstu3.model.DocumentReference;
-import org.hl7.fhir.dstu3.model.DocumentReference.DocumentReferenceContentComponent;
-import org.hl7.fhir.dstu3.model.Enumerations.DocumentReferenceStatus;
-import org.hl7.fhir.dstu3.model.Identifier;
-import org.hl7.fhir.dstu3.model.Reference;
-import org.hl7.fhir.dstu3.model.Attachment;
-import org.hl7.fhir.dstu3.model.CodeableConcept;
-import org.hl7.fhir.dstu3.model.Coding;
-import org.hl7.fhir.dstu3.model.DateTimeType;
 
 import nrls.adapter.model.task.Task;
 
@@ -60,7 +51,7 @@ public class RequestService {
 
 	@Autowired
 	private HeaderGenerator headerGenerator;
-	
+
 	@Autowired
 	private DocumentReferenceService documentReferenceService;
 
@@ -71,15 +62,19 @@ public class RequestService {
 	}
 
 	// Provider Requests
+	// Post by 'Document Reference'
 	public ResponseEntity<?> performPost(Task task) throws Exception {
 		// get audit using the 'master identifier'
 		AuditEntity auditEntity = audit.getAuditEntity(task.getPointerMasterIdentifier());
 
 		HttpEntity<String> request = new HttpEntity<>(documentReferenceService.convertTaskToDocument(task),
 				headerGenerator.generateSecurityHeaders("write", "EXP001", null));
+
 		auditEntity.setNrlsRequest(xstream.toXML(request));
+
 		ResponseEntity<String> response = restTemplate.exchange(nrlsPostPointerUrl, HttpMethod.POST, request,
 				String.class);
+
 		auditEntity.setNrlsResponse(xstream.toXML(response));
 		if (response.getStatusCode() == HttpStatus.OK) {
 			auditEntity.setSuccess(true);
@@ -94,11 +89,14 @@ public class RequestService {
 
 		HttpEntity<DocumentReference> request = new HttpEntity<>(
 				headerGenerator.generateSecurityHeaders("write", "AMS01", null));
+
 		auditEntity.setNrlsRequest(xstream.toXML(request));
+
 		// [baseUrl]/DocumentReference?subject=[https://demographics.spineservices.nhs.uk/STU3/Patient/[nhsNumber]&identifier=[system]|[value]
 		String url = nrlsGetPointersUrl + nrlsGetPointersUrlSubject + task.getSubject().getNhsNumber()
 				+ nrlsGetPointersUrlIdentifier + nrlsDeletePointersSystem + task.getPointerMasterIdentifier();
 		ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.DELETE, request, String.class);
+
 		auditEntity.setNrlsResponse(xstream.toXML(response));
 		if (response.getStatusCode() == HttpStatus.OK) {
 			auditEntity.setSuccess(true);
@@ -108,17 +106,21 @@ public class RequestService {
 
 	// Consumer Requests
 	public ResponseEntity<String> performGet(EprRequest eprRequest, boolean count) {
-		// get relevant audit
+		// get audit using the 'session Id'
 		AuditEntity auditEntity = audit.getAuditEntity(eprRequest.getSessionId());
+
 		HttpEntity<String> request = new HttpEntity<>(
 				headerGenerator.generateSecurityHeaders("read", "AMS01", eprRequest.getUserId()));
+
 		auditEntity.setNrlsRequest(xstream.toXML(request));
+
 		String url = nrlsGetPointersUrl + nrlsGetPointersUrlSubject + eprRequest.getNHSNumber();
 		if (count) {
 			url = url + nrlsGetPointersUrlCount;
 		}
 		ResponseEntity<String> response = restTemplate.exchange(url + eprRequest.getNHSNumber(), HttpMethod.GET,
 				request, String.class);
+
 		auditEntity.setNrlsResponse(xstream.toXML(response));
 		if (response.getStatusCode() == HttpStatus.OK) {
 			auditEntity.setSuccess(true);

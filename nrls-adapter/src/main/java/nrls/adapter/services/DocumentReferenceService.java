@@ -1,7 +1,5 @@
 package nrls.adapter.services;
 
-import java.text.DateFormat;
-import java.util.Date;
 import org.hl7.fhir.dstu3.model.DocumentReference;
 import org.hl7.fhir.dstu3.model.DocumentReference.DocumentReferenceContentComponent;
 import org.hl7.fhir.dstu3.model.Enumerations.DocumentReferenceStatus;
@@ -12,8 +10,6 @@ import org.hl7.fhir.dstu3.model.CodeableConcept;
 import org.hl7.fhir.dstu3.model.Coding;
 import org.hl7.fhir.dstu3.model.DateTimeType;
 import nrls.adapter.model.task.Task;
-import nrls.adapter.model.task.Type;
-
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,10 +19,10 @@ import ca.uhn.fhir.context.FhirContext;
 @Service
 public class DocumentReferenceService {
 
-    @Autowired
-    private ValueSetValidator valueSetValidator;
-    
-    public String convertTaskToDocument(Task task) throws Exception {
+	@Autowired
+	private ValueSetValidator valueSetValidator;
+
+	public String convertTaskToDocument(Task task) throws Exception {
 		DocumentReference doc = new DocumentReference();
 
 		// Set 'Master Identifier'
@@ -39,22 +35,22 @@ public class DocumentReferenceService {
 		doc.setStatus(DocumentReferenceStatus.CURRENT);
 
 		// Set 'Type'
-        if(!valueSetValidator.validateCoding(task.getType().getCoding())){
-            throw new Exception("Type is not valid within document reference");
-        } else {
-        	CodeableConcept code = new CodeableConcept();
-    		Coding coding = new Coding();
-    		coding.setSystem(task.getType().getCoding().getSystem());
-    		coding.setCode(task.getType().getCoding().getCode());
-    		coding.setDisplay(task.getType().getCoding().getDisplay());
-    		code.addCoding(coding);
-    		doc.setType(code);
-        }
+		if (!valueSetValidator.validateCoding(task.getType().getCoding())) {
+			throw new Exception("Type is not valid within document reference");
+		} else {
+			CodeableConcept code = new CodeableConcept();
+			Coding coding = new Coding();
+			coding.setSystem(task.getType().getCoding().getSystem());
+			coding.setCode(task.getType().getCoding().getCode());
+			coding.setDisplay(task.getType().getCoding().getDisplay());
+			code.addCoding(coding);
+			doc.setType(code);
+		}
 
 		// Set 'Subject'
-        if(!Validators.nhsNumberValid(task.getSubject().getNhsNumber())){
-            throw new Exception("The NHS Number is not valid");
-        }
+		if (!Validators.nhsNumberValid(task.getSubject().getNhsNumber())) {
+			throw new Exception("The NHS Number is not valid");
+		}
 		Reference subjectRef = new Reference();
 		subjectRef.setReference(task.getSubject().getNhsNumber());
 		doc.setSubject(subjectRef);
@@ -77,7 +73,7 @@ public class DocumentReferenceService {
 		attachment.setUrl(task.getContent().getAttchment().getUrl());
 		doc.addContent(new DocumentReferenceContentComponent(attachment));
 
-		FhirContext ctx = new FhirContext().forDstu3();
+		FhirContext ctx = FhirContext.forDstu3();
 
 		System.out.println(ctx.newJsonParser().encodeResourceToString(doc));
 

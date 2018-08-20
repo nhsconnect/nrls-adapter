@@ -81,18 +81,17 @@ public class ConsumerController {
 		return response;
 	}
 
-	@GetMapping("/testTasks")
+	@GetMapping("/run-batch")
 	@ResponseBody
-	public ResponseEntity<?> getTestTask() {
+	public ResponseEntity<?> runBatch() {
 
 		try {
 			taskService.extractTask();
 		} catch (ClassNotFoundException | IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
-		ResponseEntity<?> response = new ResponseEntity<>("testing task extraction", HttpStatus.OK);
+		ResponseEntity<?> response = new ResponseEntity<>("Started batch tasks. - Check audit log for details.", HttpStatus.OK);
 		return response;
 	}
 
