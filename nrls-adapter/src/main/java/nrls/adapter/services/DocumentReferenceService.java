@@ -9,6 +9,9 @@ import org.hl7.fhir.dstu3.model.Attachment;
 import org.hl7.fhir.dstu3.model.CodeableConcept;
 import org.hl7.fhir.dstu3.model.Coding;
 import org.hl7.fhir.dstu3.model.DateTimeType;
+
+import nrls.adapter.helpers.Validators;
+import nrls.adapter.helpers.ValueSetValidator;
 import nrls.adapter.model.task.Task;
 
 import org.springframework.beans.factory.annotation.Autowired;

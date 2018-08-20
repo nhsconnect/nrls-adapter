@@ -1,4 +1,4 @@
-package nrls.adapter.services;
+package nrls.adapter.helpers;
 
 import ca.uhn.fhir.context.FhirContext;
 import ca.uhn.fhir.parser.IParser;

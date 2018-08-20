@@ -4,6 +4,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import nrls.adapter.enums.RequestType;
+import nrls.adapter.helpers.FileHelper;
 import nrls.adapter.model.AuditEntity;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;

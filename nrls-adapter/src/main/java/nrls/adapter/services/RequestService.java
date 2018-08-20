@@ -12,6 +12,7 @@ import org.springframework.web.client.RestTemplate;
 
 import com.thoughtworks.xstream.XStream;
 
+import nrls.adapter.helpers.HeaderGenerator;
 import nrls.adapter.model.AuditEntity;
 import nrls.adapter.model.EprRequest;
 

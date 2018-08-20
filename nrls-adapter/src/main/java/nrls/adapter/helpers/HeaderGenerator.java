@@ -1,4 +1,4 @@
-package nrls.adapter.services;
+package nrls.adapter.helpers;
 
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;

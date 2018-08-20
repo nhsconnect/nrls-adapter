@@ -13,6 +13,7 @@ import org.springframework.stereotype.Component;
 import com.thoughtworks.xstream.XStream;
 
 import nrls.adapter.enums.RequestType;
+import nrls.adapter.helpers.FileHelper;
 import nrls.adapter.model.AuditEntity;
 import nrls.adapter.model.task.Task;
 
