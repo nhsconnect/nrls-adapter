@@ -22,6 +22,7 @@ import nrls.adapter.services.RequestService;
 import nrls.adapter.services.TaskService;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 
 @Controller
 @RequestMapping("/api/pointers")
@@ -35,6 +36,9 @@ public class ConsumerController {
 
 	@Autowired
 	private TaskService taskService;
+	
+	@Value("${adapter.asid}")
+	private String fromAsid;
 
 	private final XStream xstream;
 
@@ -51,7 +55,7 @@ public class ConsumerController {
 
 		AuditEntity auditEntity = audit.getAuditEntity(sessionId);
 		auditEntity.setConsumerRequestData(RequestType.CONSUMER, nhsNumber, userId, sessionId,
-				request.getRequestURL() + "?" + request.getQueryString());
+				request.getRequestURL() + "?" + request.getQueryString(), fromAsid);
 
 		ResponseEntity<?> response = requestService.performGet(new EprRequest(sessionId, userId, nhsNumber, pointerType), false);
 		auditEntity.setNrlsAdapterResponse(xstream.toXML(response));
@@ -68,7 +72,7 @@ public class ConsumerController {
 
 		AuditEntity auditEntity = audit.getAuditEntity(sessionId);
 		auditEntity.setConsumerRequestData(RequestType.CONSUMER, nhsNumber, userId, sessionId,
-				request.getRequestURL() + "?" + request.getQueryString());
+				request.getRequestURL() + "?" + request.getQueryString(), fromAsid);
 
 		ResponseEntity<?> response = requestService.performGet(new EprRequest(sessionId, userId, nhsNumber), true);
 		auditEntity.setNrlsAdapterResponse(xstream.toXML(response));

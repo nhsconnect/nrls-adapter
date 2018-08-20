@@ -1,6 +1,8 @@
 package nrls.adapter.model;
 
 import java.util.Date;
+import java.util.UUID;
+
 import nrls.adapter.enums.RequestType;
 
 public class AuditEntity {
@@ -11,8 +13,8 @@ public class AuditEntity {
     private String message;     // Generic additional information field in audit
     
     private String nhsNumber;
-    private String id;              // ?
-    private String transactionId;   // ?
+    private String id;              // SessionId/PointerMasterIdentifier?
+    private String transactionId;   // Generated GUID
     
     private String userId;              // Id of user sent with request
     private String fromASID;            // ASID of the request sender
@@ -22,12 +24,14 @@ public class AuditEntity {
     private String nrlsRequest;         // Request sent by the adapter to the NRLS
     private String nrlsResponse;        // Response recieved by the adapter from the NRLS
     
-    public void setConsumerRequestData(RequestType p_type, String p_nhsNumber, String p_userId, String p_sessionId, String p_nrlsAdapterRequest){
+    public void setConsumerRequestData(RequestType p_type, String p_nhsNumber, String p_userId, String p_sessionId, String p_nrlsAdapterRequest, String p_fromASID){
         type = p_type;
         nhsNumber = p_nhsNumber;
         userId = p_userId;
         id = p_sessionId;
         nrlsAdapterRequest = p_nrlsAdapterRequest;
+        fromASID = p_fromASID;
+        transactionId = UUID.randomUUID().toString();
     }
 
     public AuditEntity(String id){

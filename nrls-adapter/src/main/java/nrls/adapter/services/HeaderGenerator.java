@@ -6,6 +6,7 @@ import java.util.Date;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 
 import io.jsonwebtoken.Jwts;
@@ -29,6 +30,7 @@ public class HeaderGenerator {
 		}
 		headers.add("fromASID", fromAsid);
 		headers.add("toASID", toAsid);
+		headers.setContentType(MediaType.parseMediaType("application/fhir+json"));
 		return headers;
 	}
 

@@ -2,5 +2,7 @@ package nrls.adapter.enums;
 
 public enum RequestType {
     CONSUMER,
-    PROVIDER
+    PROVIDER,
+    PROVIDERDELETE,
+    PROVIDERCREATE
 }

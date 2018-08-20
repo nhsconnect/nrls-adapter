@@ -2,15 +2,23 @@ package nrls.adapter.services;
 
 import java.text.DateFormat;
 import java.util.Date;
-import nrls.adapter.model.documentreference.Author;
-import nrls.adapter.model.documentreference.Custodian;
-import nrls.adapter.model.documentreference.DocumentReference;
-import nrls.adapter.model.documentreference.MasterIdentifier;
-import nrls.adapter.model.documentreference.Subject;
+import org.hl7.fhir.dstu3.model.DocumentReference;
+import org.hl7.fhir.dstu3.model.DocumentReference.DocumentReferenceContentComponent;
+import org.hl7.fhir.dstu3.model.Enumerations.DocumentReferenceStatus;
+import org.hl7.fhir.dstu3.model.Identifier;
+import org.hl7.fhir.dstu3.model.Reference;
+import org.hl7.fhir.dstu3.model.Attachment;
+import org.hl7.fhir.dstu3.model.CodeableConcept;
+import org.hl7.fhir.dstu3.model.Coding;
+import org.hl7.fhir.dstu3.model.DateTimeType;
 import nrls.adapter.model.task.Task;
 import nrls.adapter.model.task.Type;
+
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import ca.uhn.fhir.context.FhirContext;
 
 @Service
 public class DocumentReferenceService {
@@ -18,46 +26,61 @@ public class DocumentReferenceService {
     @Autowired
     private ValueSetValidator valueSetValidator;
     
-	public DocumentReference convertTaskToDocumentReference(Task task) throws Exception {
-        
-		DocumentReference documentRef = new DocumentReference();
-		
-        // Set the masterIdentifier
-        MasterIdentifier masterIdentifier = new MasterIdentifier();
-        masterIdentifier.setSystem("Random");
-		masterIdentifier.setValue(task.getPointerMasterIdentifier());;
-        documentRef.setMasterIdentifier(masterIdentifier);
-		
-		documentRef.setResourceType("DocumentReference");
-        
-		documentRef.setStatus(task.getStatus());
-        
+    public String convertTaskToDocument(Task task) throws Exception {
+		DocumentReference doc = new DocumentReference();
+
+		// Set 'Master Identifier'
+		Identifier masterIdentifier = new Identifier();
+		masterIdentifier.setSystem("random");
+		masterIdentifier.setValue(task.getPointerMasterIdentifier());
+		doc.setMasterIdentifier(masterIdentifier);
+
+		// Set 'Status'
+		doc.setStatus(DocumentReferenceStatus.CURRENT);
+
+		// Set 'Type'
         if(!valueSetValidator.validateCoding(task.getType().getCoding())){
             throw new Exception("Type is not valid within document reference");
         } else {
-            documentRef.setType(task.getType());
+        	CodeableConcept code = new CodeableConcept();
+    		Coding coding = new Coding();
+    		coding.setSystem(task.getType().getCoding().getSystem());
+    		coding.setCode(task.getType().getCoding().getCode());
+    		coding.setDisplay(task.getType().getCoding().getDisplay());
+    		code.addCoding(coding);
+    		doc.setType(code);
         }
-        
+
+		// Set 'Subject'
         if(!Validators.nhsNumberValid(task.getSubject().getNhsNumber())){
             throw new Exception("The NHS Number is not valid");
         }
-        
-        Subject subject = new Subject();
-        subject.setReference("https://demographics.spineservices.nhs.uk/STU3/Patient/" + task.getSubject().getNhsNumber());
-		documentRef.setSubject(subject);
-		
-		documentRef.setIndexed(new Date().toGMTString());
-        
-        Author author = new Author();
-        author.setReference("https://directory.spineservices.nhs.uk/STU3/Organization/" + task.getAuthor().getOdsCode());
-		documentRef.setAuthor(author);
-        
-        Custodian custodian = new Custodian();
-        custodian.setReference("https://directory.spineservices.nhs.uk/STU3/Organization/" + task.getCustodian().getOdsCode());
-		documentRef.setCustodian(custodian);
-        
-		documentRef.setContent(task.getContent());
-        
-		return documentRef;
+		Reference subjectRef = new Reference();
+		subjectRef.setReference(task.getSubject().getNhsNumber());
+		doc.setSubject(subjectRef);
+
+		// Set 'Author'
+		Reference authorRef = new Reference();
+		authorRef.setReference(task.getAuthor().getOdsCode());
+		doc.getAuthor().add(authorRef);
+
+		// Set 'Custodian'
+		Reference custodianRef = new Reference();
+		custodianRef.setReference(task.getCustodian().getOdsCode());
+		doc.setCustodian(custodianRef);
+
+		// Set 'Content'
+		Attachment attachment = new Attachment();
+		attachment.setContentType(task.getContent().getAttchment().getContentType());
+		attachment.setCreationElement(new DateTimeType(task.getContent().getAttchment().getCreation()));
+		attachment.setTitle(task.getContent().getAttchment().getTitle());
+		attachment.setUrl(task.getContent().getAttchment().getUrl());
+		doc.addContent(new DocumentReferenceContentComponent(attachment));
+
+		FhirContext ctx = new FhirContext().forDstu3();
+
+		System.out.println(ctx.newJsonParser().encodeResourceToString(doc));
+
+		return ctx.newJsonParser().encodeResourceToString(doc);
 	}
 }
