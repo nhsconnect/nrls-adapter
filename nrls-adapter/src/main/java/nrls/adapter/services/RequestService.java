@@ -76,7 +76,7 @@ public class RequestService {
 				String.class);
 
 		auditEntity.setNrlsResponse(xstream.toXML(response));
-		if (response.getStatusCode() == HttpStatus.OK) {
+		if (response.getStatusCode() == HttpStatus.CREATED) {
 			auditEntity.setSuccess(true);
 		}
 		return response;
