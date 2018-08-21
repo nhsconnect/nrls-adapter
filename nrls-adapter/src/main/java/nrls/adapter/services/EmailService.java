@@ -53,7 +53,6 @@ public class EmailService {
         if (!waitingAfterErrorEmailSent) {
             sendErrorEmail();
         }
-        int i = 0;
     }
 
     private void sendErrorEmail() {
