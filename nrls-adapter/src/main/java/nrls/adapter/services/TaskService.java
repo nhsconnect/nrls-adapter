@@ -7,6 +7,7 @@ import java.util.Date;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
@@ -15,6 +16,7 @@ import com.thoughtworks.xstream.XStream;
 import nrls.adapter.enums.RequestType;
 import nrls.adapter.helpers.FileHelper;
 import nrls.adapter.model.AuditEntity;
+import nrls.adapter.model.Nrls;
 import nrls.adapter.model.Report;
 import nrls.adapter.model.ReportDocumentReference;
 import nrls.adapter.model.task.Task;
@@ -40,6 +42,8 @@ public class TaskService {
 
     @Value("${task.file.location}")
     private String taskFileLocation;
+    @Value("${task.failed.task.location}")
+    private String failedTaskFileLocation;
     @Value("${adapter.asid}")
     private String fromAsid;
 
@@ -56,12 +60,14 @@ public class TaskService {
         int totalCount = 0;
         int successCount = 0;
         int failCount = 0;
-
+        
+        Nrls failedTasks = new Nrls();
         boolean isEmpty = false;
         while (!isEmpty) {
 
             ReportDocumentReference reportDocRef = null;
             Task task = null;
+            HttpStatus status;
             try {
                 task = (Task) in.readObject();
 
@@ -73,17 +79,26 @@ public class TaskService {
 
                 if (task.getAction().equals("Create")) {
                     auditEntity.setType(RequestType.PROVIDERCREATE);
-                    requestService.performPost(task).getStatusCodeValue();
+                    status = requestService.performPost(task).getStatusCode();
                 } else {
                     auditEntity.setType(RequestType.PROVIDERDELETE);
-                    requestService.performDelete(task).getStatusCodeValue();
+                    status = requestService.performDelete(task).getStatusCode();
                 }
 
-                reportDocRef.setSuccess(true);
+                // Tie this to the request response code
+                if (status.equals(HttpStatus.OK) || status.equals(HttpStatus.CREATED)) {
+                	reportDocRef.setSuccess(true);
+                } else {
+                	reportDocRef.setSuccess(false);
+                	failedTasks.addTask(task);
+                }
                 successCount++;
 
             } catch (EOFException e) {
                 isEmpty = true;
+                if (failedTasks.getTask().size() != 0) {
+                	FileHelper.writeObjectToFileAsXML(failedTaskFileLocation + "tasks_failed_" + FileHelper.formatCurrentDate() + ".xml", failedTasks);
+                }
                 fileHelper.closeFile();
             } catch (NullPointerException npex) {
                 isEmpty = true;
@@ -94,6 +109,7 @@ public class TaskService {
                     reportDocRef.setDetails(ex.getMessage());
                 }
                 failCount++;
+                failedTasks.addTask(task);
                 // Error which is not the end of the file
                 if (null != task) LOG.error("Error processing task (" + task.getPointerMasterIdentifier() + "): " + ex.getMessage());
                 else LOG.error("Error processing task: " + ex.getMessage());

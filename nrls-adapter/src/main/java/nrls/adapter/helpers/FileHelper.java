@@ -3,6 +3,7 @@ package nrls.adapter.helpers;
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.xml.StaxDriver;
 
+import nrls.adapter.model.Nrls;
 import nrls.adapter.model.task.Task;
 
 import java.io.File;
@@ -34,6 +35,7 @@ public class FileHelper {
             file.getParentFile().mkdirs();
             fileWriter = new FileWriter(file);
             XStream xstream = new XStream();        // Using 'XStream' as it produces more readable XML output than JAXB and is quicker that XMLEncoder
+            xstream.processAnnotations(Nrls.class);
             xstream.toXML(object, fileWriter);
         } catch (IOException ex) {
             LOG.error("Error converting object to XML when saving to file: " + ex.getMessage());
