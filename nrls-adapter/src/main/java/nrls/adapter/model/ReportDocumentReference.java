@@ -89,7 +89,28 @@ public class ReportDocumentReference {
     public void setDetails(String details) {
         this.details = details;
     }
-   
+    
+    public static String getHTMLTableHeader(){
+        String html = "<tr><th style='border: solid 1px black; padding: 5px;' >";
+        html += "Master Identifier";
+        html += "</th><th style='border: solid 1px black; padding: 5px;' >";
+        html += "NHS Number";
+        html += "</th><th style='border: solid 1px black; padding: 5px;' >";
+        html += "Action";
+        html += "</th><th style='border: solid 1px black; padding: 5px;' >";
+        html += "Document Type";
+        html += "</th><th style='border: solid 1px black; padding: 5px;' >";
+        html += "Success";
+        html += "</th><th style='border: solid 1px black; padding: 5px;' >";
+        html += "Details";
+        html += "</th><th style='border: solid 1px black; padding: 5px;' >";
+        html += "Start Time";
+        html += "</th><th style='border: solid 1px black; padding: 5px;' >";
+        html += "End Time";
+        html += "</th></tr>";
+        return html;
+    }
+    
     public String getAsHTMLTableRow(){
         String html = "<tr><td style='border: solid 1px black; padding: 5px;' >";
         html += masterIdentifier;
@@ -111,27 +132,6 @@ public class ReportDocumentReference {
         html += "</td><td style='border: solid 1px black; padding: 5px;' >";
         html += endTime;
         html += "</td></tr>";
-        return html;
-    }
-    
-    public static String getHTMLTableHeader(){
-        String html = "<tr><th style='border: solid 1px black; padding: 5px;' >";
-        html += "Master Identifier";
-        html += "</th><th style='border: solid 1px black; padding: 5px;' >";
-        html += "NHS Number";
-        html += "</th><th style='border: solid 1px black; padding: 5px;' >";
-        html += "Action";
-        html += "</th><th style='border: solid 1px black; padding: 5px;' >";
-        html += "Document Type";
-        html += "</th><th style='border: solid 1px black; padding: 5px;' >";
-        html += "Success";
-        html += "</th><th style='border: solid 1px black; padding: 5px;' >";
-        html += "Details";
-        html += "</th><th style='border: solid 1px black; padding: 5px;' >";
-        html += "Start Time";
-        html += "</th><th style='border: solid 1px black; padding: 5px;' >";
-        html += "End Time";
-        html += "</th></tr>";
         return html;
     }
 }
