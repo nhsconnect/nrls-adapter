@@ -18,7 +18,7 @@ public class ErrorReport {
         for (ErrorInstance error : errorInstantList) {
             List<ErrorInstance> errorsOfType = groupedErrors.get(error.getType());
             if (null == errorsOfType) {
-                errorsOfType = new ArrayList();
+                errorsOfType = new ArrayList<ErrorInstance>();
                 groupedErrors.put(error.getType(), errorsOfType);
             }
             errorsOfType.add(error);
@@ -32,7 +32,7 @@ public class ErrorReport {
 
         html += "<div style='padding: 5px;' >The following errors occurred:</div>";
 
-        Set errorTypes = groupedErrors.keySet();
+        Set<String> errorTypes = groupedErrors.keySet();
 
         String errorTables = "";
         

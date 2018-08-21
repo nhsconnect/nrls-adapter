@@ -64,7 +64,7 @@ public class TaskService {
                 
                 AuditEntity auditEntity = audit.getAuditEntity(task.getPointerMasterIdentifier());                
 				auditEntity.setConsumerRequestData(RequestType.PROVIDER, task.getSubject().getNhsNumber(), task.getAuthor().getOdsCode(), task.getPointerMasterIdentifier(), xstream.toXML(task), fromAsid);
-				auditEntity.setMessage(taskFileLocation + " - " + new Date().toGMTString());                
+				auditEntity.setMessage(taskFileLocation + " - " + FileHelper.formatDate(new Date()));                
                 totalCount++;
                 reportDocRef = new ReportDocumentReference(task);
                 

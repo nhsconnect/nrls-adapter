@@ -9,16 +9,14 @@ public class ErrorInstance {
     private String message;
     private String id;
     private Date date;
-    private String status;
     private String request;
     private String response;
 
-    public ErrorInstance(String type, String message, String id, Date date, String status, String request, String response) {
+    public ErrorInstance(String type, String message, String id, String request, String response) {
         this.type = type;
         this.message = message;
         this.id = id;
-        this.date = date;
-        this.status = status;
+        this.date = new Date();
         this.request = request;
         this.response = response;
     }
@@ -55,14 +53,6 @@ public class ErrorInstance {
         this.date = date;
     }
 
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
     public String getRequest() {
         return request;
     }
@@ -87,8 +77,6 @@ public class ErrorInstance {
         html += "</th><th style='border: solid 1px black; padding: 5px;' >";
         html += "Date";
         html += "</th><th style='border: solid 1px black; padding: 5px;' >";
-        html += "Status";
-        html += "</th><th style='border: solid 1px black; padding: 5px;' >";
         html += "Type";
         html += "</th><th style='border: solid 1px black; padding: 5px;' >";
         html += "Request";
@@ -105,8 +93,6 @@ public class ErrorInstance {
         html += id;
         html += "</td><td style='border: solid 1px black; padding: 5px;' >";
         html += FileHelper.formatDate(date);
-        html += "</td><td style='border: solid 1px black; padding: 5px;' >";
-        html += status;
         html += "</td><td style='border: solid 1px black; padding: 5px;' >";
         html += type;
         html += "</td><td style='border: solid 1px black; padding: 5px;' >";
