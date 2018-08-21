@@ -58,11 +58,11 @@ public class TaskService {
         while (!isEmpty) {
             
             ReportDocumentReference reportDocRef = null;
-            
+            Task task = null;
             try {
-                Task task = (Task) in.readObject();
+                task = (Task) in.readObject();
                 
-                AuditEntity auditEntity = audit.getAuditEntity(task.getPointerMasterIdentifier());                
+                AuditEntity auditEntity = audit.getAuditEntity(task.getPointerMasterIdentifier());
 				auditEntity.setConsumerRequestData(RequestType.PROVIDER, task.getSubject().getNhsNumber(), task.getAuthor().getOdsCode(), task.getPointerMasterIdentifier(), xstream.toXML(task), fromAsid);
 				auditEntity.setMessage(taskFileLocation + " - " + FileHelper.formatDate(new Date()));                
                 totalCount++;
@@ -78,7 +78,6 @@ public class TaskService {
                 
                 reportDocRef.setSuccess(true);
                 successCount++;
-                audit.saveAuditEntity(task.getPointerMasterIdentifier());
                 
             } catch (EOFException e) {
                 isEmpty = true;
@@ -103,6 +102,10 @@ public class TaskService {
                 } else {
                     report.addDocumentFailedReference(reportDocRef);
                 }
+            }
+            
+            if(null != task){
+                audit.saveAuditEntity(task.getPointerMasterIdentifier());
             }
             
         }
