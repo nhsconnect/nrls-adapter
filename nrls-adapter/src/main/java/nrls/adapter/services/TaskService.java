@@ -18,31 +18,34 @@ import nrls.adapter.model.AuditEntity;
 import nrls.adapter.model.Report;
 import nrls.adapter.model.ReportDocumentReference;
 import nrls.adapter.model.task.Task;
+import org.jboss.logging.Logger;
 
 @Component
 public class TaskService {
 
+    private static final Logger LOG = Logger.getLogger(TaskService.class);
+
     @Autowired
     FileHelper fileHelper;
-    
+
     @Autowired
-	private Audit audit;
-	private final XStream xstream;
+    private Audit audit;
+    private final XStream xstream;
 
     @Autowired
     private RequestService requestService;
-    
+
     @Autowired
     private EmailService emailService;
 
     @Value("${task.file.location}")
     private String taskFileLocation;
     @Value("${adapter.asid}")
-	private String fromAsid;
-	
-	public TaskService() {
-		xstream = new XStream();
-	}
+    private String fromAsid;
+
+    public TaskService() {
+        xstream = new XStream();
+    }
 
     @Scheduled(cron = "${task.schedule.cron}")
     public void extractTask() throws ClassNotFoundException, IOException {
@@ -53,32 +56,32 @@ public class TaskService {
         int totalCount = 0;
         int successCount = 0;
         int failCount = 0;
-        
+
         boolean isEmpty = false;
         while (!isEmpty) {
-            
+
             ReportDocumentReference reportDocRef = null;
             Task task = null;
             try {
                 task = (Task) in.readObject();
-                
+
                 AuditEntity auditEntity = audit.getAuditEntity(task.getPointerMasterIdentifier());
-				auditEntity.setConsumerRequestData(RequestType.PROVIDER, task.getSubject().getNhsNumber(), task.getAuthor().getOdsCode(), task.getPointerMasterIdentifier(), xstream.toXML(task), fromAsid);
-				auditEntity.setMessage(taskFileLocation + " - " + FileHelper.formatDate(new Date()));                
+                auditEntity.setConsumerRequestData(RequestType.PROVIDER, task.getSubject().getNhsNumber(), task.getAuthor().getOdsCode(), task.getPointerMasterIdentifier(), xstream.toXML(task), fromAsid);
+                auditEntity.setMessage(taskFileLocation + " - " + FileHelper.formatDate(new Date()));
                 totalCount++;
                 reportDocRef = new ReportDocumentReference(task);
-                
+
                 if (task.getAction().equals("Create")) {
-                	auditEntity.setType(RequestType.PROVIDERCREATE);
-                    System.out.println(requestService.performPost(task).getStatusCodeValue());
+                    auditEntity.setType(RequestType.PROVIDERCREATE);
+                    requestService.performPost(task).getStatusCodeValue();
                 } else {
-                	auditEntity.setType(RequestType.PROVIDERDELETE);
-                    System.out.println(requestService.performDelete(task).getStatusCodeValue());
+                    auditEntity.setType(RequestType.PROVIDERDELETE);
+                    requestService.performDelete(task).getStatusCodeValue();
                 }
-                
+
                 reportDocRef.setSuccess(true);
                 successCount++;
-                
+
             } catch (EOFException e) {
                 isEmpty = true;
                 fileHelper.closeFile();
@@ -86,32 +89,32 @@ public class TaskService {
                 isEmpty = true;
                 report.addComment("No tasks file was found in the configured directory.");
             } catch (Exception ex) {
-                if(null != reportDocRef){
+                if (null != reportDocRef) {
                     reportDocRef.setSuccess(false);
                     reportDocRef.setDetails(ex.getMessage());
                 }
                 failCount++;
                 // Error which is not the end of the file
-                System.err.println("Error processing task: " + ex.getMessage());
-                // Log error
+                if (null != task) LOG.error("Error processing task (" + task.getPointerMasterIdentifier() + "): " + ex.getMessage());
+                else LOG.error("Error processing task: " + ex.getMessage());
             }
-            
-            if(null != reportDocRef){
-                if(reportDocRef.getSuccess()){
+
+            if (null != reportDocRef) {
+                if (reportDocRef.getSuccess()) {
                     report.addDocumentSuccessReference(reportDocRef);
                 } else {
                     report.addDocumentFailedReference(reportDocRef);
                 }
             }
-            
-            if(null != task){
+
+            if (null != task) {
                 audit.saveAuditEntity(task.getPointerMasterIdentifier());
             }
-            
+
         }
 
         FileHelper.archiveFile(taskFileLocation);
-        
+
         report.addCount(totalCount, successCount, failCount);
         emailService.sendReport(report);
     }

@@ -10,12 +10,15 @@ import java.util.Map;
 import javax.annotation.PostConstruct;
 import nrls.adapter.model.task.Coding;
 import org.hl7.fhir.dstu3.model.ValueSet;
+import org.jboss.logging.Logger;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 @Component
 public class ValueSetValidator {
 
+    private static final Logger LOG = Logger.getLogger(ValueSetValidator.class);
+    
     @Value("${fhirvaluesets.path}")
     private String fhirValueSetsPath;
 
@@ -42,7 +45,7 @@ public class ValueSetValidator {
                         codeSystemCache.put(codeSystemeCompose.getSystem(), codeSystemeCompose.getConcept());
                     }
                 } catch (Exception ex) {
-                    System.err.println(String.format("Error loading valueset: " + ex.getMessage()));
+                    LOG.error("Error loading valueset: " + ex.getMessage());
                 }
             }
         }

@@ -11,14 +11,14 @@ import java.util.Set;
  */
 public class ErrorReport {
 
-    private HashMap<String, List<ErrorInstance>> groupedErrors;
+    private final HashMap<String, List<ErrorInstance>> groupedErrors;
 
     public ErrorReport(List<ErrorInstance> errorInstantList) {
         groupedErrors = new HashMap<>();
         for (ErrorInstance error : errorInstantList) {
             List<ErrorInstance> errorsOfType = groupedErrors.get(error.getType());
             if (null == errorsOfType) {
-                errorsOfType = new ArrayList<ErrorInstance>();
+                errorsOfType = new ArrayList<>();
                 groupedErrors.put(error.getType(), errorsOfType);
             }
             errorsOfType.add(error);

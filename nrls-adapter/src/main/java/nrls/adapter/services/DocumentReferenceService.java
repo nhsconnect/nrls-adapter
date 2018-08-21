@@ -78,8 +78,6 @@ public class DocumentReferenceService {
 
 		FhirContext ctx = FhirContext.forDstu3();
 
-		System.out.println(ctx.newJsonParser().encodeResourceToString(doc));
-
 		return ctx.newJsonParser().encodeResourceToString(doc);
 	}
 }
