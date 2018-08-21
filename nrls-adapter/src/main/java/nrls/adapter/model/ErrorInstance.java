@@ -1,6 +1,7 @@
 package nrls.adapter.model;
 
 import java.util.Date;
+import nrls.adapter.helpers.FileHelper;
 
 public class ErrorInstance {
 
@@ -103,7 +104,7 @@ public class ErrorInstance {
         html += "</td><td style='border: solid 1px black; padding: 5px;' >";
         html += id;
         html += "</td><td style='border: solid 1px black; padding: 5px;' >";
-        html += date;
+        html += FileHelper.formatDate(date);
         html += "</td><td style='border: solid 1px black; padding: 5px;' >";
         html += status;
         html += "</td><td style='border: solid 1px black; padding: 5px;' >";

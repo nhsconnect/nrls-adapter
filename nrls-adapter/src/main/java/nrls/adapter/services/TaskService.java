@@ -110,7 +110,6 @@ public class TaskService {
         FileHelper.archiveFile(taskFileLocation);
         
         report.addCount(totalCount, successCount, failCount);
-        report.endReport();
         emailService.sendReport(report);
     }
 

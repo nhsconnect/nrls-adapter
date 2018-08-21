@@ -98,5 +98,10 @@ public class FileHelper {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss-SSS");
         return simpleDateFormat.format(new Date());
     }
+    
+    public static String formatDate(Date date){
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss.SSS");
+        return simpleDateFormat.format(new Date());
+    }
 
 }

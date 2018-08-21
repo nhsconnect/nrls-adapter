@@ -1,6 +1,7 @@
 package nrls.adapter.model;
 
 import java.util.Date;
+import nrls.adapter.helpers.FileHelper;
 import nrls.adapter.model.task.Task;
 
 public class ReportDocumentReference {
@@ -128,9 +129,9 @@ public class ReportDocumentReference {
         html += "</td><td style='border: solid 1px black; padding: 5px;' >";
         html += details;
         html += "</td><td style='border: solid 1px black; padding: 5px;' >";
-        html += startTime;
+        html += FileHelper.formatDate(startTime);
         html += "</td><td style='border: solid 1px black; padding: 5px;' >";
-        html += endTime;
+        html += FileHelper.formatDate(endTime);
         html += "</td></tr>";
         return html;
     }

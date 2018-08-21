@@ -1,7 +1,6 @@
 package nrls.adapter.model;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -9,10 +8,7 @@ import java.util.List;
  * is performed
  */
 public class Report {
-    
-    private Date startTime; // When the report was started
-    private Date endTime;   // When the report was completed, just before sending
-    
+        
     private String countBanner;
     private String description; // Additional information about the run
     private List<String> comments; // For additional comments on report
@@ -25,7 +21,6 @@ public class Report {
         documentReferencesSuccess = new ArrayList<>();
         documentReferencesFail = new ArrayList<>();
         comments = new ArrayList<>();
-        startTime = new Date();
         description = "";
         countBanner = "";
     }
@@ -47,19 +42,12 @@ public class Report {
         comments.add(comment);
     }
     
-    public void endReport(){
-        endTime = new Date();
-    }
     
     public void addCount(int total, int successful, int failed){
         countBanner = "<div class='countBanner' style='padding: 5px;' >Total processed: " + total + " ( Successful: " + successful + ", Failures: " + failed + ")</div>";
     }
     
     public String getReportAsHTML(){
-        
-        if(null == endTime){
-            endReport();
-        }
         
         String html = "<html><head></head><body>";
         html += "<h1>NRLS Adapter - Report</h1>";
