@@ -60,6 +60,7 @@ public class TaskService {
 	@Scheduled(cron = "${task.schedule.cron}")
 	public void extractTaskFileList() {
 		ArrayList<Path> filePathStream = fileHelper.getFileList(tasksFolderLocation);
+		System.out.println(filePathStream.size());
 		if (filePathStream.size() == 0) {
 			Report report = new Report();
 			report.addComment("No task files were found in the configured directory.");
@@ -86,8 +87,8 @@ public class TaskService {
 		boolean isEmpty = false;
 		while (!isEmpty) {
 			try {
-				LOG.info("Processing task " + task.getAction() + " (" + task.getPointerMasterIdentifier() + ")");
 				task = (Task) in.readObject();
+				LOG.info("Processing task " + task.getAction() + " (" + task.getPointerMasterIdentifier() + ")");
 				reportDocRef = new ReportDocumentReference(task);
 				taskStatus = processTask(task, report, reportDocRef);
 			} catch (EOFException e) {
@@ -98,6 +99,7 @@ public class TaskService {
 				fileHelper.closeFile();
 				break;
 			} catch (NullPointerException npex) {
+				npex.printStackTrace();
 				isEmpty = true;
 				report.addComment("No tasks file was found in the configured directory.");
 			} catch (Exception ex) {

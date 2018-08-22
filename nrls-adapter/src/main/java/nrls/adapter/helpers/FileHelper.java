@@ -67,6 +67,7 @@ public class FileHelper {
     	            files.add(filePath);
     	        }
     	    });
+    	    filePathStream.close();
     	} catch (IOException readingEx) {
     		LOG.error("Error reading folder: " + readingEx.getMessage());
 		}
