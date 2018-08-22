@@ -37,11 +37,10 @@ public class HeaderGenerator {
 	// Provider Validation
 	// No specific validation rules apply.
 	public String generateProviderToken(String scope, String fromAsid, String odsCode) {
-
 		String jws = Jwts.builder().setHeaderParam("typ", "JWT").setIssuer("https://demonstrator.com")
 				.setSubject("https://fhir.nhs.uk/Id/accredited-system|" + fromAsid)
 				.setAudience("https://nrls.com/fhir/documentreference")
-				.setExpiration(new Date().from(Instant.now().plus(5, ChronoUnit.MINUTES))).setIssuedAt(new Date())
+				.setExpiration(Date.from(Instant.now().plus(5, ChronoUnit.MINUTES))).setIssuedAt(new Date())
 				.claim("reason_for_request", "directcare").claim("scope", "patient/DocumentReference." + scope)
 				.claim("requesting_system", "https://fhir.nhs.uk/Id/accredited-system|" + fromAsid)
 				.claim("requesting_organisation", "https://fhir.nhs.uk/Id/ods-organization-code|" + odsCode).compact();
@@ -51,11 +50,10 @@ public class HeaderGenerator {
 	// Consumer Validation
 	// In the context of a Consumer request the requesting_user claim is mandatory.
 	public String generateConsumerToken(String scope, String fromAsid, String odsCode, String userId) {
-
 		String jws = Jwts.builder().setHeaderParam("typ", "JWT").setIssuer("https://demonstrator.com")
 				.setSubject("https://fhir.nhs.uk/Id/sds-role-profile-id|" + userId)
 				.setAudience("https://nrls.com/fhir/documentreference")
-				.setExpiration(new Date().from(Instant.now().plus(5, ChronoUnit.MINUTES))).setIssuedAt(new Date())
+				.setExpiration(Date.from(Instant.now().plus(5, ChronoUnit.MINUTES))).setIssuedAt(new Date())
 				.claim("reason_for_request", "directcare").claim("scope", "patient/DocumentReference." + scope)
 				.claim("requesting_system", "https://fhir.nhs.uk/Id/accredited-system|" + fromAsid)
 				.claim("requesting_organisation", "https://fhir.nhs.uk/Id/ods-organization-code|" + odsCode)

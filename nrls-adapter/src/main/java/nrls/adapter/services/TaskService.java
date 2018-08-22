@@ -17,6 +17,7 @@ import com.thoughtworks.xstream.XStream;
 import nrls.adapter.enums.RequestType;
 import nrls.adapter.helpers.FileHelper;
 import nrls.adapter.model.AuditEntity;
+import nrls.adapter.model.ErrorInstance;
 import nrls.adapter.model.Nrls;
 import nrls.adapter.model.Report;
 import nrls.adapter.model.ReportDocumentReference;
@@ -71,7 +72,7 @@ public class TaskService {
 		}
 	}
 
-	// Process and compile/send report for a single batch of tasks.
+	// Process a single batch of tasks and compile/send report.
 	public void processTaskFile(ObjectInputStream in, Path file) {
 		Task task = null;
 		Report report = new Report();
@@ -104,6 +105,15 @@ public class TaskService {
 					reportDocRef.setDetails(ex.getMessage());
 					report.addDocumentFailedReference(reportDocRef);
 				}
+				
+				AuditEntity auditEntity = audit.getAuditEntity(task.getPointerMasterIdentifier());
+				auditEntity.setNrlsResponse(ex.getMessage());
+				audit.saveAuditEntity(task.getPointerMasterIdentifier());
+				// Send out Error Email....
+				ErrorInstance message = new ErrorInstance("Connection Error", ex.getMessage(),
+						task.getPointerMasterIdentifier(), task.toString(), null);
+				emailService.sendError(message);
+				
 				taskStatus = false;
 				// Error which is not the end of the file
 				if (null != task) LOG.error("Error processing task (" + task.getPointerMasterIdentifier() + "): " + ex.getMessage());
