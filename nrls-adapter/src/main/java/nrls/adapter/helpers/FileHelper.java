@@ -12,8 +12,12 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.ObjectInputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.stream.Stream;
 
 import org.jboss.logging.Logger;
 import org.springframework.stereotype.Service;
@@ -52,6 +56,17 @@ public class FileHelper {
         }
 
         return success;
+    }
+    
+    public Stream<Path> getFileList(String folderPath) {
+    	Stream<Path> filePathStream = null;
+    	try {
+			filePathStream=Files.walk(Paths.get(folderPath),1);
+		} catch (IOException openStreamEx) {
+			LOG.error("Error opening folder: " + openStreamEx.getMessage());
+		}
+    	return filePathStream;	
+    	
     }
 
     public ObjectInputStream getObjectInputStream(String filePath) {
