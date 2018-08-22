@@ -66,7 +66,6 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 		ErrorInstance message = new ErrorInstance("Connection Error", ex.getMessage(),
 				request.getParameter("sessionId"), formatRequest(request), null);
 		emailService.sendError(message);
-		;
 		return ex;
 	}
 

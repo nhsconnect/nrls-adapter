@@ -86,6 +86,7 @@ public class TaskService {
 		boolean isEmpty = false;
 		while (!isEmpty) {
 			try {
+				LOG.info("Processing task " + task.getAction() + " (" + task.getPointerMasterIdentifier() + ")");
 				task = (Task) in.readObject();
 				reportDocRef = new ReportDocumentReference(task);
 				taskStatus = processTask(task, report, reportDocRef);
@@ -116,8 +117,9 @@ public class TaskService {
 				
 				taskStatus = false;
 				// Error which is not the end of the file
-				if (null != task) LOG.error("Error processing task (" + task.getPointerMasterIdentifier() + "): " + ex.getMessage());
-				else LOG.error("Error processing task: " + ex.getMessage());
+				if (task != null) {
+					LOG.error("Error processing task (" + task.getPointerMasterIdentifier() + "): " + ex.getMessage());
+				}
 			}
 			
 			// Update task counts/failed task list.

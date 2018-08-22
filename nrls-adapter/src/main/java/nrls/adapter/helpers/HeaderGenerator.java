@@ -20,9 +20,8 @@ public class HeaderGenerator {
 	@Value("${spine.asid}")
 	private String toAsid;
 
-	private HttpHeaders headers = new HttpHeaders();
-
 	public HttpHeaders generateSecurityHeaders(String scope, String odsCode, String userId) {
+		HttpHeaders headers = new HttpHeaders();
 		if (scope.equals("read")) {
 			headers.add("Authorization", "Bearer " + generateConsumerToken(scope, fromAsid, odsCode, userId));
 		} else {
