@@ -2,8 +2,6 @@ package nrls.adapter.contoller;
 
 import com.thoughtworks.xstream.XStream;
 
-import java.io.IOException;
-
 import javax.servlet.http.HttpServletRequest;
 import nrls.adapter.enums.RequestType;
 import nrls.adapter.model.AuditEntity;
@@ -84,13 +82,7 @@ public class ConsumerController {
 	@GetMapping("/run-batch")
 	@ResponseBody
 	public ResponseEntity<?> runBatch() {
-
-		try {
-			taskService.extractTask();
-		} catch (ClassNotFoundException | IOException e) {
-			e.printStackTrace();
-		}
-
+		taskService.extractTaskFileList();
 		ResponseEntity<?> response = new ResponseEntity<>("Started batch tasks. - Check audit log for details.", HttpStatus.OK);
 		return response;
 	}

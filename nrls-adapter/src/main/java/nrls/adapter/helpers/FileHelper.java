@@ -16,6 +16,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.stream.Stream;
 
@@ -58,15 +59,18 @@ public class FileHelper {
         return success;
     }
     
-    public Stream<Path> getFileList(String folderPath) {
-    	Stream<Path> filePathStream = null;
-    	try {
-			filePathStream=Files.walk(Paths.get(folderPath),1);
-		} catch (IOException openStreamEx) {
-			LOG.error("Error opening folder: " + openStreamEx.getMessage());
+    public ArrayList<Path> getFileList(String folderPath) {
+    	ArrayList<Path> files = new ArrayList<Path>();
+    	try (Stream<Path> filePathStream=Files.walk(Paths.get(folderPath),1)) {
+    	    filePathStream.forEach(filePath -> {
+    	        if (Files.isRegularFile(filePath)) {
+    	            files.add(filePath);
+    	        }
+    	    });
+    	} catch (IOException readingEx) {
+    		LOG.error("Error reading folder: " + readingEx.getMessage());
 		}
-    	return filePathStream;	
-    	
+    	return files;
     }
 
     public ObjectInputStream getObjectInputStream(String filePath) {
@@ -92,7 +96,6 @@ public class FileHelper {
             inputStream.close();
             reader.close();
         } catch (IOException closeStreamEx) {
-            // TODO Auto-generated catch block
             LOG.error("Error closing Input Stream: " + closeStreamEx.getMessage());
         }
     }

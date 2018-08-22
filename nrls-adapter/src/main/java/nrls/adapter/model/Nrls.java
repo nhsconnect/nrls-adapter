@@ -43,5 +43,4 @@ public class Nrls {
 	public void addTask(Task task) {
 		this.task.add(task);
 	}
-
 }
