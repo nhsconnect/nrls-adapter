@@ -1,23 +1,28 @@
 package nrls.adapter.helpers;
 
-import ca.uhn.fhir.context.FhirContext;
-import ca.uhn.fhir.parser.IParser;
 import java.io.File;
 import java.nio.file.Files;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import javax.annotation.PostConstruct;
-import nrls.adapter.model.task.Coding;
+
 import org.hl7.fhir.dstu3.model.ValueSet;
-import org.jboss.logging.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+
+import ca.uhn.fhir.context.FhirContext;
+import ca.uhn.fhir.parser.IParser;
+import nrls.adapter.model.task.Coding;
+import nrls.adapter.services.LoggingService;
 
 @Component
 public class ValueSetValidator {
 
-    private static final Logger LOG = Logger.getLogger(ValueSetValidator.class);
+	@Autowired
+	private LoggingService loggingService;
     
     @Value("${fhirvaluesets.path}")
     private String fhirValueSetsPath;
@@ -45,7 +50,7 @@ public class ValueSetValidator {
                         codeSystemCache.put(codeSystemeCompose.getSystem(), codeSystemeCompose.getConcept());
                     }
                 } catch (Exception ex) {
-                    LOG.error("Error loading valueset: " + ex.getMessage());
+                    loggingService.error("Error loading valueset: " + ex.getMessage(), null);
                 }
             }
         }

@@ -2,21 +2,25 @@ package nrls.adapter.services;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import javax.mail.internet.MimeMessage;
-import nrls.adapter.model.ErrorInstance;
-import nrls.adapter.model.ErrorReport;
-import nrls.adapter.model.Report;
-import org.jboss.logging.Logger;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Component;
 
+import nrls.adapter.enums.RequestType;
+import nrls.adapter.model.ErrorInstance;
+import nrls.adapter.model.ErrorReport;
+import nrls.adapter.model.Report;
+
 @Component
 public class EmailService {
 
-    private static final Logger LOG = Logger.getLogger(EmailService.class);
+	@Autowired
+	private LoggingService loggingService;
     
     @Value("${batch.report.recipient.email}")
     private String reportRecipient;
@@ -47,7 +51,7 @@ public class EmailService {
             helper.setText(report.getReportAsHTML(), true);
             javaMailSender.send(mail);
         } catch (Exception e) {
-            LOG.error("Error sending Report email");
+            loggingService.error("Error sending Report email", RequestType.PROVIDER);
         }
     }
 
@@ -75,7 +79,7 @@ public class EmailService {
             helper.setText(errorReport.getReportAsHTML(), true);
             javaMailSender.send(mail);
         } catch (Exception e) {
-            LOG.error("Error sending Error email");
+            loggingService.error("Error sending Error email", RequestType.PROVIDER);
         }
 
         scheduleTaskWithFixedDelay();
@@ -89,7 +93,7 @@ public class EmailService {
                 try {
                     Thread.sleep(errorEmailInterval * 60000); // 60000 milliseconds in 1 minute
                 } catch (InterruptedException ex) {
-                    LOG.error("Error waiting for interval before sending email again");
+                    loggingService.error("Error waiting for interval before sending email again", RequestType.PROVIDER);
                 }
                 // Check if there are further errors built up, if so send them and start another wait to check again at the next interval
                 if (errors.size() > 0) {

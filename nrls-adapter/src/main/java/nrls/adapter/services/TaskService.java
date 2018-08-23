@@ -22,12 +22,12 @@ import nrls.adapter.model.Nrls;
 import nrls.adapter.model.Report;
 import nrls.adapter.model.ReportDocumentReference;
 import nrls.adapter.model.task.Task;
-import org.jboss.logging.Logger;
 
 @Component
 public class TaskService {
 
-	private static final Logger LOG = Logger.getLogger(TaskService.class);
+	@Autowired
+	private LoggingService loggingService;
 
 	@Autowired
 	FileHelper fileHelper;
@@ -90,7 +90,8 @@ public class TaskService {
 		while (!isEmpty) {
 			try {
 				task = (Task) in.readObject();
-				LOG.info("Processing task: " + task.getAction() + " (" + task.getPointerMasterIdentifier() + ") - " + file.getFileName());
+				loggingService.providerIdentifier = task.getPointerMasterIdentifier();
+				loggingService.info("Processing task: " + task.getAction() + " (" + task.getPointerMasterIdentifier() + ") - " + file.getFileName(), RequestType.PROVIDER);
 				reportDocRef = new ReportDocumentReference(task);
 				taskStatus = processTask(task, report, reportDocRef);
 			} catch (EOFException e) {
@@ -122,7 +123,7 @@ public class TaskService {
 				taskStatus = false;
 				// Error which is not the end of the file
 				if (task != null) {
-					LOG.error("Error processing task (" + task.getPointerMasterIdentifier() + "): " + ex.getMessage());
+					loggingService.error("Error processing task (" + task.getPointerMasterIdentifier() + "): " + ex.getMessage(), RequestType.PROVIDER);
 				}
 			}
 			

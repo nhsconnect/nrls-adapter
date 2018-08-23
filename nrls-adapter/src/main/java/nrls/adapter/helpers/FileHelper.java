@@ -1,11 +1,5 @@
 package nrls.adapter.helpers;
 
-import com.thoughtworks.xstream.XStream;
-import com.thoughtworks.xstream.io.xml.StaxDriver;
-
-import nrls.adapter.model.Nrls;
-import nrls.adapter.model.task.Task;
-
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -24,15 +18,25 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
-import org.jboss.logging.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import com.thoughtworks.xstream.XStream;
+import com.thoughtworks.xstream.io.xml.StaxDriver;
+
+import nrls.adapter.enums.RequestType;
+import nrls.adapter.model.Nrls;
+import nrls.adapter.model.task.Task;
+import nrls.adapter.services.LoggingService;
 
 @Service
 public class FileHelper {
 
-    private static final Logger LOG = Logger.getLogger(FileHelper.class);
     private FileReader reader;
     private ObjectInputStream inputStream;
+    
+    @Autowired
+    public static LoggingService loggingService;
 
     public static boolean writeObjectToFileAsXML(String filePath, Object object) {
 
@@ -47,7 +51,7 @@ public class FileHelper {
             xstream.processAnnotations(Nrls.class);
             xstream.toXML(object, fileWriter);
         } catch (IOException ex) {
-            LOG.error("Error converting object to XML when saving to file: " + ex.getMessage());
+        	loggingService.error("Error converting object to XML when saving to file: " + ex.getMessage(), RequestType.PROVIDER);
             success = false;
         } finally {
             try {
@@ -55,7 +59,7 @@ public class FileHelper {
                     fileWriter.close();
                 }
             } catch (IOException fileCloseEx) {
-                LOG.error("Error closing FileWriter after writing xml to file: " + fileCloseEx.getMessage());
+            	loggingService.error("Error closing FileWriter after writing xml to file: " + fileCloseEx.getMessage(), RequestType.PROVIDER);
                 success = false;
             }
         }
@@ -74,7 +78,7 @@ public class FileHelper {
     	    });
     	    filePathStream.close();
     	} catch (IOException readingEx) {
-    		LOG.error("Error reading folder: " + readingEx.getMessage());
+    		loggingService.error("Error reading folder: " + readingEx.getMessage(), RequestType.PROVIDER);
 		}
     	files.sort(dateComparator);
     	return files;
@@ -113,9 +117,9 @@ public class FileHelper {
             inputStream = xstream.createObjectInputStream(reader);
 
         } catch (FileNotFoundException fileNotFoundEx) {
-            LOG.error("Error opening File: " + fileNotFoundEx.getMessage());
+        	loggingService.error("Error opening File: " + fileNotFoundEx.getMessage(), RequestType.PROVIDER);
         } catch (IOException openingInputStreamEx) {
-            LOG.error("Error opening Input Stream: " + openingInputStreamEx.getMessage());
+        	loggingService.error("Error opening Input Stream: " + openingInputStreamEx.getMessage(), RequestType.PROVIDER);
         }
 
         return inputStream;
@@ -126,7 +130,7 @@ public class FileHelper {
             inputStream.close();
             reader.close();
         } catch (IOException closeStreamEx) {
-            LOG.error("Error closing Input Stream: " + closeStreamEx.getMessage());
+        	loggingService.error("Error closing Input Stream: " + closeStreamEx.getMessage(), RequestType.PROVIDER);
         }
     }
 
@@ -140,7 +144,7 @@ public class FileHelper {
         toFile.getParentFile().mkdirs();
 
         if (!fromFile.renameTo(toFile)) {
-            LOG.error("Error archiving Tasks file (" + filePath + ")");
+        	loggingService.error("Error archiving Tasks file (" + filePath + ")", RequestType.PROVIDER);
         }
     }
     

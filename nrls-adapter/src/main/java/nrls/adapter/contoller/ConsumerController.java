@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import nrls.adapter.model.EprRequest;
 import nrls.adapter.services.Audit;
+import nrls.adapter.services.LoggingService;
 import nrls.adapter.services.RequestService;
 import nrls.adapter.services.TaskService;
 
@@ -35,6 +36,9 @@ public class ConsumerController {
 	@Autowired
 	private TaskService taskService;
 	
+	@Autowired
+	private LoggingService loggingService;
+	
 	@Value("${adapter.asid}")
 	private String fromAsid;
 
@@ -51,6 +55,7 @@ public class ConsumerController {
 			@RequestParam(name = "nhsNumber", required = true) String nhsNumber,
 			@RequestParam(name = "pointerType", required = false) String pointerType, HttpServletRequest request) {
 
+		loggingService.consumerIdentifier = sessionId;
 		AuditEntity auditEntity = audit.getAuditEntity(sessionId);
 		auditEntity.setConsumerRequestData(RequestType.CONSUMER, nhsNumber, userId, sessionId,
 				request.getRequestURL() + "?" + request.getQueryString(), fromAsid);
@@ -67,7 +72,8 @@ public class ConsumerController {
 	public ResponseEntity<?> getCount(@RequestParam(name = "sessionId", required = true) String sessionId,
 			@RequestParam(name = "userId", required = true) String userId,
 			@RequestParam(name = "nhsNumber", required = true) String nhsNumber, HttpServletRequest request) {
-
+		
+		loggingService.consumerIdentifier = sessionId;
 		AuditEntity auditEntity = audit.getAuditEntity(sessionId);
 		auditEntity.setConsumerRequestData(RequestType.CONSUMER, nhsNumber, userId, sessionId,
 				request.getRequestURL() + "?" + request.getQueryString(), fromAsid);
