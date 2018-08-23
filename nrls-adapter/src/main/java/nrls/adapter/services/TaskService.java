@@ -50,6 +50,8 @@ public class TaskService {
 	private String failedTaskFileLocation;
 	@Value("${adapter.asid}")
 	private String fromAsid;
+	
+	private Path currentFile;
 
 	public TaskService() {
 		xstream = new XStream();
@@ -67,6 +69,7 @@ public class TaskService {
 			emailService.sendReport(report);
 		} else {
 			for(Path filePath : filePathStream) {
+				currentFile = filePath;
 				processTaskFile(fileHelper.getObjectInputStream(filePath.toString()), filePath);
 			}
 		}
@@ -143,7 +146,7 @@ public class TaskService {
 		HttpStatus status = null;
 		AuditEntity auditEntity = audit.getAuditEntity(task.getPointerMasterIdentifier());
 		auditEntity.setConsumerRequestData(RequestType.PROVIDER, task.getSubject().getNhsNumber(), task.getAuthor().getOdsCode(), task.getPointerMasterIdentifier(), xstream.toXML(task), fromAsid);
-		auditEntity.setMessage(taskFileLocation + " - " + FileHelper.formatDate(new Date()));
+		auditEntity.setMessage(currentFile.getFileName() + " - " + FileHelper.formatDate(new Date()));
 
 		if (task.getAction().equals("Create")) {
 			auditEntity.setType(RequestType.PROVIDERCREATE);
