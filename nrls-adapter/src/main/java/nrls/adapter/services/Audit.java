@@ -53,9 +53,9 @@ public class Audit {
             // Store the audit entry to a file
             String filePath;
             if(RequestType.CONSUMER == auditEntity.getType()){
-                filePath = auditPathConsumer + auditEntity.getNhsNumber() + "_Consumer_" + simpleDateFormat.format(auditEntity.getDateLogged()) + "_" + auditEntity.getTransactionId() + ".xml";
+                filePath = auditPathConsumer + "NrlsAudit_" + auditEntity.getNhsNumber() + "_Consumer_" + simpleDateFormat.format(auditEntity.getDateLogged()) + "_" + auditEntity.getTransactionId() + ".xml";
             } else {
-                filePath = auditPathProvider + auditEntity.getNhsNumber() + "_Provider_" + simpleDateFormat.format(auditEntity.getDateLogged()) + "_" + auditEntity.getTransactionId() + ".xml";
+                filePath = auditPathProvider + "NrlsAudit_" + auditEntity.getNhsNumber() + "_Provider_" + simpleDateFormat.format(auditEntity.getDateLogged()) + "_" + auditEntity.getTransactionId() + ".xml";
             }
             return FileHelper.writeObjectToFileAsXML(filePath, auditEntity);
         }

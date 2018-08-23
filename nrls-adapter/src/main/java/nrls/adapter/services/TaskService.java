@@ -60,7 +60,6 @@ public class TaskService {
 	@Scheduled(cron = "${task.schedule.cron}")
 	public void extractTaskFileList() {
 		ArrayList<Path> filePathStream = fileHelper.getFileList(tasksFolderLocation);
-		System.out.println(filePathStream.size());
 		if (filePathStream.size() == 0) {
 			Report report = new Report();
 			report.addComment("No task files were found in the configured directory.");
@@ -94,7 +93,7 @@ public class TaskService {
 			} catch (EOFException e) {
 				isEmpty = true;
 				if (failedTasks.getTask().size() != 0) {
-					FileHelper.writeObjectToFileAsXML(failedTaskFileLocation + "tasks_failed_" + FileHelper.formatCurrentDate() + "-" + file.getFileName(), failedTasks);
+					FileHelper.writeObjectToFileAsXML(failedTaskFileLocation + "NrlsError_" + FileHelper.formatCurrentDate() + "-" + file.getFileName(), failedTasks);
 				}
 				fileHelper.closeFile();
 				break;
