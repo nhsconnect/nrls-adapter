@@ -88,7 +88,7 @@ public class TaskService {
 		while (!isEmpty) {
 			try {
 				task = (Task) in.readObject();
-				LOG.info("Processing task " + task.getAction() + " (" + task.getPointerMasterIdentifier() + ")");
+				LOG.info("Processing task: " + task.getAction() + " (" + task.getPointerMasterIdentifier() + ") - " + file.getFileName());
 				reportDocRef = new ReportDocumentReference(task);
 				taskStatus = processTask(task, report, reportDocRef);
 			} catch (EOFException e) {

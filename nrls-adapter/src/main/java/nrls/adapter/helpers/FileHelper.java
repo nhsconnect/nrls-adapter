@@ -17,6 +17,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.stream.Stream;
 
@@ -59,6 +60,7 @@ public class FileHelper {
         return success;
     }
     
+    // Add code to extract date from file name and reorder.
     public ArrayList<Path> getFileList(String folderPath) {
     	ArrayList<Path> files = new ArrayList<Path>();
     	try (Stream<Path> filePathStream=Files.walk(Paths.get(folderPath),1)) {
@@ -71,8 +73,22 @@ public class FileHelper {
     	} catch (IOException readingEx) {
     		LOG.error("Error reading folder: " + readingEx.getMessage());
 		}
+    	files.sort(dateComparator);
     	return files;
     }
+    
+    public static Comparator<Path> dateComparator = new Comparator<Path>() {
+
+    	public int compare(Path path1, Path path2) {
+    	   long fileDate1 = path1.toFile().lastModified();
+    	   long fileDate2 = path2.toFile().lastModified();
+
+    	   //ascending order
+    	   return Double.compare(fileDate1, fileDate2);
+
+    	   //descending order
+    	   // return Double.compare(fileDate2, fileDate1);
+        }};
 
     public ObjectInputStream getObjectInputStream(String filePath) {
 
