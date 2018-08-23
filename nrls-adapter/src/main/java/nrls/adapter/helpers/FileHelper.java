@@ -16,9 +16,12 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Date;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
 import org.jboss.logging.Logger;
@@ -60,7 +63,7 @@ public class FileHelper {
         return success;
     }
     
-    // Add code to extract date from file name and reorder.
+    // Extract date from file name and return file list in order of oldest first.
     public ArrayList<Path> getFileList(String folderPath) {
     	ArrayList<Path> files = new ArrayList<Path>();
     	try (Stream<Path> filePathStream=Files.walk(Paths.get(folderPath),1)) {
@@ -77,18 +80,28 @@ public class FileHelper {
     	return files;
     }
     
-    public static Comparator<Path> dateComparator = new Comparator<Path>() {
+	public static Comparator<Path> dateComparator = new Comparator<Path>() {
+		public int compare(Path path1, Path path2) {
+			
+			LocalDate fileDate1 = null;
+			LocalDate fileDate2 = null;
+			Matcher m1 = Pattern.compile(".*_(.*?)\\..*", Pattern.CASE_INSENSITIVE).matcher(path1.getFileName().toString());
+	        while (m1.find()) {
+	            fileDate1 = LocalDate.parse(m1.group(1));
+	        }
+	        
+	        Matcher m2 = Pattern.compile(".*_(.*?)\\..*", Pattern.CASE_INSENSITIVE).matcher(path2.getFileName().toString());
+	        while (m2.find()) {
+				fileDate2 = LocalDate.parse(m2.group(1));
+	        }
 
-    	public int compare(Path path1, Path path2) {
-    	   long fileDate1 = path1.toFile().lastModified();
-    	   long fileDate2 = path2.toFile().lastModified();
+			// oldest first
+			return fileDate1.compareTo(fileDate2);
 
-    	   //ascending order
-    	   return Double.compare(fileDate1, fileDate2);
-
-    	   //descending order
-    	   // return Double.compare(fileDate2, fileDate1);
-        }};
+			// latest first
+			// return fileDate2.compareTo(fileDate1);
+		}
+	};
 
     public ObjectInputStream getObjectInputStream(String filePath) {
 
