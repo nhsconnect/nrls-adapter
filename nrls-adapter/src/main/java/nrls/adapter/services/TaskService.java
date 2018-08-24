@@ -51,7 +51,7 @@ public class TaskService {
 	@Value("${adapter.asid}")
 	private String fromAsid;
 	
-	private Path currentFile;
+	public Path currentFile;
 
 	public TaskService() {
 		xstream = new XStream();
