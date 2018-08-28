@@ -41,7 +41,9 @@ public class TaskService {
 
 	@Autowired
 	private EmailService emailService;
-
+	
+	@Value("${provider.enabled}")
+	private boolean providerEnabled;
 	@Value("${task.file.location}")
 	private String taskFileLocation;
 	@Value("${task.folder.location}")
@@ -61,16 +63,18 @@ public class TaskService {
 	// pass each file to the "Process Taskfile method" in turn
 	@Scheduled(cron = "${task.schedule.cron}")
 	public void extractTaskFileList() {
-		ArrayList<Path> filePathStream = fileHelper.getFileList(tasksFolderLocation);
-		if (filePathStream.size() == 0) {
-			Report report = new Report();
-			report.addComment("No task files were found in the configured directory.");
-			report.addCount(0, 0, 0);
-			emailService.sendReport(report);
-		} else {
-			for(Path filePath : filePathStream) {
-				currentFile = filePath;
-				processTaskFile(fileHelper.getObjectInputStream(filePath.toString()), filePath);
+		if (providerEnabled) {
+			ArrayList<Path> filePathStream = fileHelper.getFileList(tasksFolderLocation);
+			if (filePathStream.size() == 0) {
+				Report report = new Report();
+				report.addComment("No task files were found in the configured directory.");
+				report.addCount(0, 0, 0);
+				emailService.sendReport(report);
+			} else {
+				for(Path filePath : filePathStream) {
+					currentFile = filePath;
+					processTaskFile(fileHelper.getObjectInputStream(filePath.toString()), filePath);
+				}
 			}
 		}
 	}
