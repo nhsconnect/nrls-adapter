@@ -123,7 +123,7 @@ public class TaskServiceTests {
 		String message = "Next Execution date: " + df.format(nextExecutionTime);
 		loggingServiceGER.info(message);
 
-		assertEquals("2018/08/25 00:00:00 Saturday", df.format(nextExecutionTime));
+		assertEquals(true, df.format(nextExecutionTime).contains("00:00:00 Saturday"));
 	}
 
 	// Check processing an individual task produces a valid status:
