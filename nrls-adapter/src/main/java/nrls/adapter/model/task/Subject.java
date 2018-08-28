@@ -8,11 +8,11 @@ public class Subject {
 	private String nhsNumber;
 
 	public String getNhsNumber() {
-		return nhsNumber;
+		return nhsNumber.replace(" ", "");
 	}
 
 	public void setNhsNumber(String nhsNumber) {
-		this.nhsNumber = nhsNumber;
+		this.nhsNumber = nhsNumber.replace(" ", "");
 	}
 
 	@Override
