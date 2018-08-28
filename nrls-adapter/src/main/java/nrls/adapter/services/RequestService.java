@@ -1,8 +1,11 @@
 package nrls.adapter.services;
 
+import org.hl7.fhir.dstu3.model.DocumentReference;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.client.RestTemplateBuilder;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
@@ -15,12 +18,10 @@ import com.thoughtworks.xstream.XStream;
 import nrls.adapter.helpers.HeaderGenerator;
 import nrls.adapter.model.AuditEntity;
 import nrls.adapter.model.EprRequest;
-
-import org.hl7.fhir.dstu3.model.DocumentReference;
-
 import nrls.adapter.model.task.Task;
 
 @Component
+@CacheConfig(cacheNames = {"pointers"})
 public class RequestService {
 
 	@Autowired
@@ -106,6 +107,7 @@ public class RequestService {
 	}
 
 	// Consumer Requests
+	@Cacheable(value="pointers", key="{ #eprRequest?.SessionId, #eprRequest?.NHSNumber, #count }")
 	public ResponseEntity<String> performGet(EprRequest eprRequest, boolean count) {
 		// get audit using the 'session Id'
 		AuditEntity auditEntity = audit.getAuditEntity(eprRequest.getSessionId());
