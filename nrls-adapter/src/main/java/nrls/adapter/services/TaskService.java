@@ -96,9 +96,6 @@ public class TaskService {
 				taskStatus = processTask(task, report, reportDocRef);
 			} catch (EOFException e) {
 				isEmpty = true;
-				if (failedTasks.getTask().size() != 0) {
-					FileHelper.writeObjectToFileAsXML(failedTaskFileLocation + "NrlsError_" + FileHelper.formatCurrentDate() + "-" + file.getFileName(), failedTasks);
-				}
 				fileHelper.closeFile();
 				break;
 			} catch (NullPointerException npex) {
@@ -135,6 +132,11 @@ public class TaskService {
 				failCount++;
 				failedTasks.addTask(task);
 			}
+		}
+		
+		// Write out the failed task file.
+		if (failedTasks.getTask().size() != 0) {
+			FileHelper.writeObjectToFileAsXML(failedTaskFileLocation + "NrlsError_" + FileHelper.formatCurrentDate() + "-" + file.getFileName(), failedTasks);
 		}
 		
 		FileHelper.archiveFile(file.toString());
