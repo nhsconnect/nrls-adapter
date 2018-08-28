@@ -23,9 +23,9 @@ public class HeaderGenerator {
 	public HttpHeaders generateSecurityHeaders(String scope, String odsCode, String userId) {
 		HttpHeaders headers = new HttpHeaders();
 		if (scope.equals("read")) {
-			headers.add("Authorization", "Bearer " + generateConsumerToken(scope, fromAsid, odsCode, userId));
+			headers.add("Authorization", "Bearer " + generateConsumerToken(scope, odsCode, userId));
 		} else {
-			headers.add("Authorization", "Bearer " + generateProviderToken(scope, fromAsid, odsCode));
+			headers.add("Authorization", "Bearer " + generateProviderToken(scope, odsCode));
 		}
 		headers.add("fromASID", fromAsid);
 		headers.add("toASID", toAsid);
@@ -35,7 +35,7 @@ public class HeaderGenerator {
 
 	// Provider Validation
 	// No specific validation rules apply.
-	public String generateProviderToken(String scope, String fromAsid, String odsCode) {
+	public String generateProviderToken(String scope, String odsCode) {
 		String jws = Jwts.builder().setHeaderParam("typ", "JWT").setIssuer("https://demonstrator.com")
 				.setSubject("https://fhir.nhs.uk/Id/accredited-system|" + fromAsid)
 				.setAudience("https://nrls.com/fhir/documentreference")
@@ -48,7 +48,7 @@ public class HeaderGenerator {
 
 	// Consumer Validation
 	// In the context of a Consumer request the requesting_user claim is mandatory.
-	public String generateConsumerToken(String scope, String fromAsid, String odsCode, String userId) {
+	public String generateConsumerToken(String scope, String odsCode, String userId) {
 		String jws = Jwts.builder().setHeaderParam("typ", "JWT").setIssuer("https://demonstrator.com")
 				.setSubject("https://fhir.nhs.uk/Id/sds-role-profile-id|" + userId)
 				.setAudience("https://nrls.com/fhir/documentreference")
