@@ -36,7 +36,6 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 		// Deal with error
 		loggingService.error("Exception: Generic", RequestType.CONSUMER);
 		loggingService.error(ex.getMessage(), RequestType.CONSUMER);
-		ex.printStackTrace();
 		// Send out Error Email....
 		ErrorInstance message = new ErrorInstance("Generic Error", ex.getMessage(), null, null, null);
 		emailService.sendError(message);
