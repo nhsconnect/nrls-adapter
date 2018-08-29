@@ -3,14 +3,13 @@ package nrls.adapter.config;
 import java.io.File;
 import java.io.FileInputStream;
 import java.security.KeyStore;
+
 import org.apache.http.client.HttpClient;
 import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
 import org.apache.http.conn.ssl.TrustSelfSignedStrategy;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.ssl.SSLContextBuilder;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.client.ClientHttpRequestFactory;
@@ -25,12 +24,9 @@ public class SslConfig {
     private String keystorePath;
     @Value("${server.ssl.key-store-password}")
     private String keystorePassword;
-
-    @Autowired
-    private RestTemplateBuilder builder;
     
     @Bean
-    public RestTemplate getRestTemplate(RestTemplateBuilder builder) {
+    public RestTemplate getRestTemplate() {
         
         try {
             KeyStore keyStore = KeyStore.getInstance(KeyStore.getDefaultType());
