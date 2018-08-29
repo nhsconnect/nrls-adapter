@@ -7,11 +7,11 @@ Consumer and Provider NRLS adapters
 ## nrls-adapter consumer details
 
 ## nrls-adapter installation instructions (installing as a windows service):
- - download the latest release from [here](https://github.com/nhsconnect/nrls-adapter/releases)
- - extract the folder into a working directory.
- - open "Command prompt" or your chosen alternative.
- - navigate to the working directory.
- - run the following commands:
+ - Download the latest release from [here](https://github.com/nhsconnect/nrls-adapter/releases)
+ - Extract the folder into a working directory.
+ - Open "Command prompt" or your chosen alternative.
+ - Navigate to the working directory.
+ - Run the following commands:
    - `nrls-adpater.exe install` - to install the service.
    - `nrls-adapter.exe start` - to start the service.
    - `nrls-adapter.exe stop` - to stop the service.
@@ -51,3 +51,4 @@ Consumer and Provider NRLS adapters
 #### notification configuration
  - `batch.report.recipient.email=<email.address@test.com>` - the email address that reports should be sent to.
  - `error.report.recipient.email=<email.address@test.com>` - the email address that error reports should be sent to.
+ - `error.report.interval.mins=60` - error reports are grouped and sent in a single email at every interval, to avoid overwhelming an inbox with error reports.
