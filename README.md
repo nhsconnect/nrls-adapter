@@ -1,15 +1,6 @@
 # nrls-adapter
 Consumer and Provider NRLS adapters
 
-## nrls-adapter provider details
-- Tasks file name must conform to the following format: "NrlsTasks_YYYY-MM-DD.xml" as the date is used to determine the order in which the files should be processed. (The oldest files are processed first.)
-- `provider.enabled=true` should be set to true.
-- `task.schedule.cron=0 0 0 * * ?` should be configured (default is at midnight everyday).
-- `task.folder.location=provider` should be configured to point to the directory in which the "NrlsTasks_YYYY-MM-DD.xml" files will be dumped.
-- see [nrls-adapter configuration guide](https://github.com/nhsconnect/nrls-adapter/blob/master/README.md#nrls-adapter-configuration-guide-applicationproperties) for more general configuration instructions.
-## nrls-adapter consumer details
-- `provider.enabled=false` should be set to false.
-- see [nrls-adapter configuration guide](https://github.com/nhsconnect/nrls-adapter/blob/master/README.md#nrls-adapter-configuration-guide-applicationproperties) for more general configuration instructions.
 ## nrls-adapter installation instructions (installing as a windows service):
  - Download the latest release from [here](https://github.com/nhsconnect/nrls-adapter/releases)
  - Extract the folder into a working directory.
@@ -20,6 +11,15 @@ Consumer and Provider NRLS adapters
    - `nrls-adapter.exe start` - to start the service.
    - `nrls-adapter.exe stop` - to stop the service.
    - `nrls-adapter.exe uninstall` - to uninstall the service.
+## nrls-adapter provider details
+- Tasks file name must conform to the following format: "NrlsTasks_YYYY-MM-DD.xml" as the date is used to determine the order in which the files should be processed. (The oldest files are processed first.)
+- `provider.enabled=true` should be set to true.
+- `task.schedule.cron=0 0 0 * * ?` should be configured (default is at midnight everyday).
+- `task.folder.location=provider` should be configured to point to the directory in which the "NrlsTasks_YYYY-MM-DD.xml" files will be dumped.
+- see [nrls-adapter configuration guide](https://github.com/nhsconnect/nrls-adapter/blob/master/README.md#nrls-adapter-configuration-guide-applicationproperties) for more general configuration instructions.
+## nrls-adapter consumer details
+- `provider.enabled=false` should be set to false.
+- see [nrls-adapter configuration guide](https://github.com/nhsconnect/nrls-adapter/blob/master/README.md#nrls-adapter-configuration-guide-applicationproperties) for more general configuration instructions.
 ## nrls-adapter configuration guide (application.properties):
 #### configuration
  - `provider.enabled=true` - determines if the adapter will be used as a provider, if disabled the the adapter will be configured to work as a consumer
