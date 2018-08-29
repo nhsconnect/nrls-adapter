@@ -44,8 +44,6 @@ public class TaskService {
 	
 	@Value("${provider.enabled}")
 	private boolean providerEnabled;
-	@Value("${task.file.location}")
-	private String taskFileLocation;
 	@Value("${task.folder.location}")
 	private String tasksFolderLocation;
 	@Value("${task.failed.task.location}")
