@@ -35,7 +35,7 @@ import nrls.adapter.model.task.Type;
 @RunWith(MockitoJUnitRunner.class)
 public class TaskServiceTests {
 
-	private Logger loggingServiceGER = Logger.getLogger(TaskServiceTests.class);
+	private Logger LOGGER = Logger.getLogger(TaskServiceTests.class);
 
 	@Mock
 	RequestService requestServiceMock;
@@ -101,7 +101,7 @@ public class TaskServiceTests {
 
 		SimpleDateFormat df = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss EEEE");
 		final Date yesterday = today.getTime();
-		loggingServiceGER.info("Yesterday was : " + df.format(yesterday));
+		LOGGER.info("Yesterday was : " + df.format(yesterday));
 		Date nextExecutionTime = trigger.nextExecutionTime(new TriggerContext() {
 
 			@Override
@@ -121,7 +121,7 @@ public class TaskServiceTests {
 		});
 
 		String message = "Next Execution date: " + df.format(nextExecutionTime);
-		loggingServiceGER.info(message);
+		LOGGER.info(message);
 
 		assertEquals(true, df.format(nextExecutionTime).contains("00:00:00 Saturday"));
 	}

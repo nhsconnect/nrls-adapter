@@ -33,7 +33,6 @@ public class HeaderGeneratorTests {
 		Jwt<?, ?> jwt = Jwts.parser().parse(headers.getValuesAsList("Authorization").get(0).replace("Bearer ", ""));
 
 		assertEquals("{typ=JWT, alg=none}", jwt.getHeader().toString());
-		System.out.println(jwt.getBody().toString());
 		assertEquals(true, jwt.getBody().toString().contains("iss=https://demonstrator.com"));
 		assertEquals(true, jwt.getBody().toString().contains("sub=https://fhir.nhs.uk/Id/sds-role-profile-id|234234234"));
 		assertEquals(true, jwt.getBody().toString().contains("aud=https://nrls.com/fhir/documentreference"));
@@ -56,7 +55,6 @@ public class HeaderGeneratorTests {
 		Jwt<?, ?> jwt = Jwts.parser().parse(headers.getValuesAsList("Authorization").get(0).replace("Bearer ", ""));
 
 		assertEquals("{typ=JWT, alg=none}", jwt.getHeader().toString());
-		System.out.println(jwt.getBody().toString());
 		assertEquals(true, jwt.getBody().toString().contains("iss=https://demonstrator.com"));
 		assertEquals(true, jwt.getBody().toString().contains("sub=https://fhir.nhs.uk/Id/accredited-system|200000000117"));
 		assertEquals(true, jwt.getBody().toString().contains("aud=https://nrls.com/fhir/documentreference"));

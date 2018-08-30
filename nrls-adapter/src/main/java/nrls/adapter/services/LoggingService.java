@@ -8,31 +8,31 @@ import nrls.adapter.enums.RequestType;
 @Component
 public class LoggingService {
 
-	private Logger loggingServiceGER = Logger.getLogger(LoggingService.class);
+	private Logger LOGGER = Logger.getLogger(LoggingService.class);
 	public String consumerIdentifier = null;
 	public String providerIdentifier = null;
 	
 	public void error(String message, RequestType type) {
 		if (type.equals(RequestType.CONSUMER)) {
-			loggingServiceGER.error(consumerIdentifier + ": " + message);
+			LOGGER.error(consumerIdentifier + ": " + message);
 		}
 		if (type.equals(RequestType.PROVIDER)) {
-			loggingServiceGER.error(providerIdentifier + ": " + message);
+			LOGGER.error(providerIdentifier + ": " + message);
 		}
 		if (type.equals(null)) {
-			loggingServiceGER.error("System: " + message);
+			LOGGER.error("System: " + message);
 		}
 	}
 	
 	public void info(String message, RequestType type) {
 		if (type.equals(RequestType.CONSUMER)) {
-			loggingServiceGER.info(consumerIdentifier + ": " + message);
+			LOGGER.info(consumerIdentifier + ": " + message);
 		}
 		if (type.equals(RequestType.PROVIDER)) {
-			loggingServiceGER.info(providerIdentifier + ": " + message);
+			LOGGER.info(providerIdentifier + ": " + message);
 		}
 		if (type.equals(null)) {
-			loggingServiceGER.error("System: " + message);
+			LOGGER.error("System: " + message);
 		}
 	}
 	
