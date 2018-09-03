@@ -2,6 +2,7 @@ package nrls.adapter.helpers;
 
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
+import java.util.Collections;
 import java.util.Date;
 
 import org.springframework.beans.factory.annotation.Value;
@@ -30,6 +31,7 @@ public class HeaderGenerator {
 		headers.add("fromASID", fromAsid);
 		headers.add("toASID", toAsid);
 		headers.setContentType(MediaType.parseMediaType("application/fhir+json"));
+		headers.setAccept(Collections.singletonList(MediaType.parseMediaType("application/fhir+xml")));
 		return headers;
 	}
 
@@ -56,7 +58,7 @@ public class HeaderGenerator {
 				.claim("reason_for_request", "directcare").claim("scope", "patient/DocumentReference." + scope)
 				.claim("requesting_system", "https://fhir.nhs.uk/Id/accredited-system|" + fromAsid)
 				.claim("requesting_organisation", "https://fhir.nhs.uk/Id/ods-organization-code|" + odsCode)
-				.claim("requesting_user", "https://fhir.nhs.uk/Id/sds-role-profile-id/" + userId).compact();
+				.claim("requesting_user", "https://fhir.nhs.uk/Id/sds-role-profile-id|" + userId).compact();
 		return jws;
 	}
 

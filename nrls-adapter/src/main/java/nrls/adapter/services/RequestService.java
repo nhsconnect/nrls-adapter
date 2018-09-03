@@ -119,7 +119,8 @@ public class RequestService {
         if (count) {
             url = url + nrlsGetPointersUrlCount;
         }
-        ResponseEntity<String> response = restTemplate.exchange(url + eprRequest.getNHSNumber(), HttpMethod.GET,
+        
+        ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.GET,
                 request, String.class);
 
         auditEntity.setNrlsResponse(xstream.toXML(response));
