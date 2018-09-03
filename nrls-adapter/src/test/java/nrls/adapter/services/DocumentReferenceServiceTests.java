@@ -76,8 +76,9 @@ public class DocumentReferenceServiceTests {
 	public void testConvertTaskToDocRef() throws Exception {
 		when(valueSetValidatorMock.validateCoding(task.getType().getCoding())).thenReturn(true);
 		String docRef = docServiceImpl.convertTaskToDocument(task);
+		System.out.println(docRef);
 		assertEquals(
-				"{\"resourceType\":\"DocumentReference\",\"masterIdentifier\":{\"system\":\"random\",\"value\":\"c037a0cb-12kl-4976-83a1-a5d2703e6aa3\"},\"status\":\"current\",\"type\":{\"coding\":[{\"system\":\"http://snomed.info/sct\",\"code\":\"736253002\",\"display\":\"Mental health crisis plan (record artifact)\"}]},\"subject\":{\"reference\":\"9464250321\"},\"author\":[{\"reference\":\"RV9\"}],\"custodian\":{\"reference\":\"RV9\"},\"content\":[{\"attachment\":{\"contentType\":\"text/html<\",\"url\":\"http://www.humbercontactPage/?\",\"title\":\"Mental health Crisis Plan Report\",\"creation\":\"2018-05-02\"}}]}",
+				"{\"resourceType\":\"DocumentReference\",\"masterIdentifier\":{\"value\":\"c037a0cb-12kl-4976-83a1-a5d2703e6aa3\"},\"status\":\"current\",\"type\":{\"coding\":[{\"system\":\"http://snomed.info/sct\",\"code\":\"736253002\",\"display\":\"Mental health crisis plan (record artifact)\"}]},\"subject\":{\"reference\":\"9464250321\"},\"author\":[{\"reference\":\"RV9\"}],\"custodian\":{\"reference\":\"RV9\"},\"content\":[{\"attachment\":{\"contentType\":\"text/html<\",\"url\":\"http://www.humbercontactPage/?\",\"title\":\"Mental health Crisis Plan Report\",\"creation\":\"2018-05-02\"}}]}",
 				docRef);
 	}
 

@@ -24,7 +24,7 @@ public class HeaderGeneratorTests {
 	@Test
 	public void testValidProviderHeaderCreation() {
 		HttpHeaders headers = headerGenerator.generateSecurityHeaders("read", "AMS01", "234234234");
-		assertEquals(4, headers.size());
+		assertEquals(5, headers.size());
 		assertEquals("application/fhir+json", headers.getContentType().toString());
 		assertEquals(true, headers.getValuesAsList("Authorization").get(0).contains("Bearer"));
 		assertEquals(true, headers.getValuesAsList("fromAsid").get(0).contains("200000000117"));
@@ -40,13 +40,13 @@ public class HeaderGeneratorTests {
 		assertEquals(true, jwt.getBody().toString().contains("scope=patient/DocumentReference.read"));
 		assertEquals(true, jwt.getBody().toString().contains("requesting_system=https://fhir.nhs.uk/Id/accredited-system|200000000117"));
 		assertEquals(true, jwt.getBody().toString().contains("requesting_organisation=https://fhir.nhs.uk/Id/ods-organization-code|AMS01"));
-		assertEquals(true, jwt.getBody().toString().contains("requesting_user=https://fhir.nhs.uk/Id/sds-role-profile-id/234234234"));
+		assertEquals(true, jwt.getBody().toString().contains("requesting_user=https://fhir.nhs.uk/Id/sds-role-profile-id|234234234"));
 	}
 
 	@Test
 	public void testValidConsumerHeaderCreation() {
 		HttpHeaders headers = headerGenerator.generateSecurityHeaders("write", "EXP001", null);
-		assertEquals(4, headers.size());
+		assertEquals(5, headers.size());
 		assertEquals("application/fhir+json", headers.getContentType().toString());
 		assertEquals(true, headers.getValuesAsList("Authorization").get(0).contains("Bearer"));
 		assertEquals(true, headers.getValuesAsList("fromAsid").get(0).contains("200000000117"));
