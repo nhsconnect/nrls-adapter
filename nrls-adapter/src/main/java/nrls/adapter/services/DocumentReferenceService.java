@@ -15,6 +15,7 @@ import nrls.adapter.helpers.ValueSetValidator;
 import nrls.adapter.model.task.Task;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import ca.uhn.fhir.context.FhirContext;
@@ -24,13 +25,16 @@ public class DocumentReferenceService {
 
 	@Autowired
 	private ValueSetValidator valueSetValidator;
+	
+	@Value("${nrls.api.pointer.system}")
+    private String nrlsPointerSystem;
 
 	public String convertTaskToDocument(Task task) throws Exception {
 		DocumentReference doc = new DocumentReference();
 
 		// Set 'Master Identifier'
 		Identifier masterIdentifier = new Identifier();
-		masterIdentifier.setSystem("random");
+		masterIdentifier.setSystem(nrlsPointerSystem);
 		masterIdentifier.setValue(task.getPointerMasterIdentifier());
 		doc.setMasterIdentifier(masterIdentifier);
 

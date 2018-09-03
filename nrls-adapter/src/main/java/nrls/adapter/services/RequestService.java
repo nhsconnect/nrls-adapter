@@ -43,8 +43,8 @@ public class RequestService {
     // NRLS Provider Delete configuration
     @Value("${nrls.api.delete.pointer.url}")
     private String nrlsDeletePointersUrl;
-    @Value("${nrls.api.delete.pointer.system}")
-    private String nrlsDeletePointersSystem;
+    @Value("${nrls.api.pointer.system}")
+    private String nrlsPointerSystem;
 
     @Autowired
     private RestTemplate restTemplate;
@@ -94,7 +94,7 @@ public class RequestService {
 
         // [baseUrl]/DocumentReference?subject=[https://demographics.spineservices.nhs.uk/STU3/Patient/[nhsNumber]&identifier=[system]|[value]
         String url = nrlsGetPointersUrl + nrlsGetPointersUrlSubject + task.getSubject().getNhsNumber()
-                + nrlsGetPointersUrlIdentifier + nrlsDeletePointersSystem + task.getPointerMasterIdentifier();
+                + nrlsGetPointersUrlIdentifier + nrlsPointerSystem + task.getPointerMasterIdentifier();
         ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.DELETE, request, String.class);
 
         auditEntity.setNrlsResponse(xstream.toXML(response));
