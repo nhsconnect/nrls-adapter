@@ -94,7 +94,7 @@ public class RequestService {
 
         // [baseUrl]/DocumentReference?subject=[https://demographics.spineservices.nhs.uk/STU3/Patient/[nhsNumber]&identifier=[system]|[value]
         String url = nrlsGetPointersUrl + nrlsGetPointersUrlSubject + task.getSubject().getNhsNumber()
-                + nrlsGetPointersUrlIdentifier + nrlsPointerSystem + task.getPointerMasterIdentifier();
+                + nrlsGetPointersUrlIdentifier + nrlsPointerSystem + "|" + task.getPointerMasterIdentifier();
         ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.DELETE, request, String.class);
 
         auditEntity.setNrlsResponse(xstream.toXML(response));

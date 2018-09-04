@@ -5,6 +5,9 @@ import org.hl7.fhir.dstu3.model.DocumentReference.DocumentReferenceContentCompon
 import org.hl7.fhir.dstu3.model.Enumerations.DocumentReferenceStatus;
 import org.hl7.fhir.dstu3.model.Identifier;
 import org.hl7.fhir.dstu3.model.Reference;
+
+import java.util.Date;
+
 import org.hl7.fhir.dstu3.model.Attachment;
 import org.hl7.fhir.dstu3.model.CodeableConcept;
 import org.hl7.fhir.dstu3.model.Coding;
@@ -59,17 +62,17 @@ public class DocumentReferenceService {
 			throw new Exception("The NHS Number is not valid");
 		}
 		Reference subjectRef = new Reference();
-		subjectRef.setReference(task.getSubject().getNhsNumber());
+		subjectRef.setReference("https://demographics.spineservices.nhs.uk/STU3/Patient/" + task.getSubject().getNhsNumber());
 		doc.setSubject(subjectRef);
 
 		// Set 'Author'
 		Reference authorRef = new Reference();
-		authorRef.setReference(task.getAuthor().getOdsCode());
+		authorRef.setReference("https://directory.spineservices.nhs.uk/STU3/Organization/" + task.getAuthor().getOdsCode());
 		doc.getAuthor().add(authorRef);
 
 		// Set 'Custodian'
 		Reference custodianRef = new Reference();
-		custodianRef.setReference(task.getCustodian().getOdsCode());
+		custodianRef.setReference("https://directory.spineservices.nhs.uk/STU3/Organization/" + task.getCustodian().getOdsCode());
 		doc.setCustodian(custodianRef);
 
 		// Set 'Content'
@@ -79,6 +82,10 @@ public class DocumentReferenceService {
 		attachment.setTitle(task.getContent().getAttchment().getTitle());
 		attachment.setUrl(task.getContent().getAttchment().getUrl());
 		doc.addContent(new DocumentReferenceContentComponent(attachment));
+		
+		//Set 'Created'/'Indexed'
+		doc.setCreated(new Date());
+		doc.setIndexed(new Date());
 
 		FhirContext ctx = FhirContext.forDstu3();
 
