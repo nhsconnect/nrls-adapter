@@ -77,9 +77,14 @@ public class DocumentReferenceServiceTests {
 		when(valueSetValidatorMock.validateCoding(task.getType().getCoding())).thenReturn(true);
 		String docRef = docServiceImpl.convertTaskToDocument(task);
 		System.out.println(docRef);
-		assertEquals(
-				"{\"resourceType\":\"DocumentReference\",\"masterIdentifier\":{\"value\":\"c037a0cb-12kl-4976-83a1-a5d2703e6aa3\"},\"status\":\"current\",\"type\":{\"coding\":[{\"system\":\"http://snomed.info/sct\",\"code\":\"736253002\",\"display\":\"Mental health crisis plan (record artifact)\"}]},\"subject\":{\"reference\":\"9464250321\"},\"author\":[{\"reference\":\"RV9\"}],\"custodian\":{\"reference\":\"RV9\"},\"content\":[{\"attachment\":{\"contentType\":\"text/html<\",\"url\":\"http://www.humbercontactPage/?\",\"title\":\"Mental health Crisis Plan Report\",\"creation\":\"2018-05-02\"}}]}",
-				docRef);
+		assertEquals(true, docRef.contains("\"resourceType\":\"DocumentReference\""));
+		assertEquals(true, docRef.contains("masterIdentifier\":{\"value\":\"c037a0cb-12kl-4976-83a1-a5d2703e6aa3\"}"));
+		assertEquals(true, docRef.contains("\"status\":\"current\""));
+		assertEquals(true, docRef.contains("\"type\":{\"coding\":[{\"system\":\"http://snomed.info/sct\",\"code\":\"736253002\",\"display\":\"Mental health crisis plan (record artifact)\"}]}"));
+		assertEquals(true, docRef.contains("\"subject\":{\"reference\":\"https://demographics.spineservices.nhs.uk/STU3/Patient/9464250321\"}"));
+		assertEquals(true, docRef.contains("\"author\":[{\"reference\":\"https://directory.spineservices.nhs.uk/STU3/Organization/RV9\"}]"));
+		assertEquals(true, docRef.contains("\"custodian\":{\"reference\":\"https://directory.spineservices.nhs.uk/STU3/Organization/RV9\"}"));
+		assertEquals(true, docRef.contains("\"content\":[{\"attachment\":{\"contentType\":\"text/html<\",\"url\":\"http://www.humbercontactPage/?\",\"title\":\"Mental health Crisis Plan Report\""));
 	}
 
 }
