@@ -105,7 +105,7 @@ public class RequestService {
     }
 
     // Consumer Requests
-    @Cacheable(value = "pointers", key = "{ #eprRequest?.SessionId, #eprRequest?.NHSNumber, #count }")
+    @Cacheable(value = "pointers", key = "{ #eprRequest?.SessionId, #eprRequest?.NHSNumber }", condition="#count==true")
     public ResponseEntity<String> performGet(EprRequest eprRequest, boolean count) {
         // get audit using the 'session Id'
         AuditEntity auditEntity = audit.getAuditEntity(eprRequest.getSessionId());
