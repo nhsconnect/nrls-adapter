@@ -70,8 +70,9 @@ public class RequestService {
         HttpEntity<String> request = new HttpEntity<>(documentReferenceService.convertTaskToDocument(task),
                 headerGenerator.generateSecurityHeaders("write", "EXP001", null));
 
-        auditEntity.setNrlsRequest(xstream.toXML(request));
-
+        auditEntity.setNrlsRequest("<url>" + nrlsPostPointerUrl + "</url>" + xstream.toXML(request));
+        
+        // [baseUrl]/DocumentReference
         ResponseEntity<String> response = restTemplate.exchange(nrlsPostPointerUrl, HttpMethod.POST, request,
                 String.class);
 
@@ -90,11 +91,12 @@ public class RequestService {
         HttpEntity<DocumentReference> request = new HttpEntity<>(
                 headerGenerator.generateSecurityHeaders("write", "AMS01", null));
 
-        auditEntity.setNrlsRequest(xstream.toXML(request));
-
         // [baseUrl]/DocumentReference?subject=[https://demographics.spineservices.nhs.uk/STU3/Patient/[nhsNumber]&identifier=[system]|[value]
         String url = nrlsGetPointersUrl + nrlsGetPointersUrlSubject + task.getSubject().getNhsNumber()
                 + nrlsGetPointersUrlIdentifier + nrlsPointerSystem + "|" + task.getPointerMasterIdentifier();
+        
+        auditEntity.setNrlsRequest("<url>" + url + "</url>" + xstream.toXML(request));
+        
         ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.DELETE, request, String.class);
 
         auditEntity.setNrlsResponse(xstream.toXML(response));
@@ -112,13 +114,15 @@ public class RequestService {
 
         HttpEntity<String> request = new HttpEntity<>(
                 headerGenerator.generateSecurityHeaders("read", "AMS01", eprRequest.getUserId()));
-
-        auditEntity.setNrlsRequest(xstream.toXML(request));
-
+        
+        // [baseUrl]/DocumentReference?subject=[https://demographics.spineservices.nhs.uk/STU3/Patient/[nhsNumber]
         String url = nrlsGetPointersUrl + nrlsGetPointersUrlSubject + eprRequest.getNHSNumber();
+        // [baseUrl]/DocumentReference?subject=[https://demographics.spineservices.nhs.uk/STU3/Patient/[nhsNumber]&_summary=count
         if (count) {
             url = url + nrlsGetPointersUrlCount;
         }
+        
+        auditEntity.setNrlsRequest("<url>" + url + "</url>" + xstream.toXML(request));
         
         ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.GET,
                 request, String.class);
