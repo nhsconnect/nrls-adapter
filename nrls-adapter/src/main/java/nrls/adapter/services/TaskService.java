@@ -164,6 +164,7 @@ public class TaskService {
 			audit.saveAuditEntity(task.getPointerMasterIdentifier());
 		}
 
+		reportDocRef.setDetails(status.name() + ":" + status.getReasonPhrase());
 		if (status.equals(HttpStatus.OK) || status.equals(HttpStatus.CREATED)) {
 			reportDocRef.setSuccess(true);
 			report.addDocumentSuccessReference(reportDocRef);
