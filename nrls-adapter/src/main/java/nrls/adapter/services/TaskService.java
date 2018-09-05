@@ -9,6 +9,7 @@ import java.util.Date;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
@@ -148,24 +149,23 @@ public class TaskService {
 	
 	// Process and audit a single task.
 	public boolean processTask(Task task, Report report, ReportDocumentReference reportDocRef) throws Exception {
-		HttpStatus status = null;
+		ResponseEntity<?> response = null;
 		AuditEntity auditEntity = audit.getAuditEntity(task.getPointerMasterIdentifier());
 		auditEntity.setConsumerRequestData(RequestType.PROVIDER, task.getSubject().getNhsNumber(), task.getAuthor().getOdsCode(), task.getPointerMasterIdentifier(), xstream.toXML(task), fromAsid);
 		auditEntity.setMessage(currentFile.getFileName() + " - " + FileHelper.formatDate(new Date()));
 
 		if (task.getAction().equals("Create")) {
 			auditEntity.setType(RequestType.PROVIDERCREATE);
-			status = requestService.performPost(task).getStatusCode();
+			response = requestService.performPost(task);
 		} else if (task.getAction().equals("Delete")) {
 			auditEntity.setType(RequestType.PROVIDERDELETE);
-			status = requestService.performDelete(task).getStatusCode();
+			response = requestService.performDelete(task);
 		}
 		if (null != task) {
 			audit.saveAuditEntity(task.getPointerMasterIdentifier());
 		}
-
-		reportDocRef.setDetails(status.name() + ":" + status.getReasonPhrase());
-		if (status.equals(HttpStatus.OK) || status.equals(HttpStatus.CREATED)) {
+		reportDocRef.setDetails(xstream.toXML(response.getStatusCodeValue()) + " : " + xstream.toXML(response.getBody()));
+		if (response.getStatusCode().equals(HttpStatus.OK) || response.getStatusCode().equals(HttpStatus.CREATED)) {
 			reportDocRef.setSuccess(true);
 			report.addDocumentSuccessReference(reportDocRef);
 			return true;
