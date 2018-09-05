@@ -77,6 +77,7 @@ public class RequestService {
                 String.class);
 
         auditEntity.setNrlsResponse(xstream.toXML(response));
+        auditEntity.setResponseCode(response.getStatusCode());
         if (response.getStatusCode() == HttpStatus.CREATED) {
             auditEntity.setSuccess(true);
         }
@@ -100,6 +101,7 @@ public class RequestService {
         ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.DELETE, request, String.class);
 
         auditEntity.setNrlsResponse(xstream.toXML(response));
+        auditEntity.setResponseCode(response.getStatusCode());
         if (response.getStatusCode() == HttpStatus.OK) {
             auditEntity.setSuccess(true);
         }
@@ -128,6 +130,7 @@ public class RequestService {
                 request, String.class);
 
         auditEntity.setNrlsResponse(xstream.toXML(response));
+        auditEntity.setResponseCode(response.getStatusCode());
         if (response.getStatusCode() == HttpStatus.OK) {
             auditEntity.setSuccess(true);
         }

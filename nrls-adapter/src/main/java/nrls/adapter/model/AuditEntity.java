@@ -3,12 +3,15 @@ package nrls.adapter.model;
 import java.util.Date;
 import java.util.UUID;
 
+import org.springframework.http.HttpStatus;
+
 import nrls.adapter.enums.RequestType;
 
 public class AuditEntity {
     
     private Date dateLogged;    // Date audit was created
     private boolean success;    // Indication of the NRLS Adapter success in processing task/request
+    private HttpStatus responseCode; // The Response code of the task.
     private RequestType type; // Type of request or NRLS action that was performed
     private String message;     // Generic additional information field in audit
     
@@ -54,7 +57,15 @@ public class AuditEntity {
         this.success = success;
     }
 
-    public String getMessage() {
+    public HttpStatus getResponseCode() {
+		return responseCode;
+	}
+
+	public void setResponseCode(HttpStatus responseCode) {
+		this.responseCode = responseCode;
+	}
+
+	public String getMessage() {
         return message;
     }
 
