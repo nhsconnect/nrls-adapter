@@ -25,6 +25,9 @@ public class RequestService {
 
     @Autowired
     private Audit audit;
+    
+    @Value("${nrls.api.requesting.organisation}")
+    private String requestingOrganisation;
 
     // NRLS Consumer configuration
     @Value("${nrls.api.get.pointer.url}")
@@ -68,7 +71,7 @@ public class RequestService {
         AuditEntity auditEntity = audit.getAuditEntity(task.getPointerMasterIdentifier());
 
         HttpEntity<String> request = new HttpEntity<>(documentReferenceService.convertTaskToDocument(task),
-                headerGenerator.generateSecurityHeaders("write", "EXP001", null));
+                headerGenerator.generateSecurityHeaders("write", requestingOrganisation, null));
 
         auditEntity.setNrlsRequest("<url>" + nrlsPostPointerUrl + "</url>" + xstream.toXML(request));
         
@@ -90,7 +93,7 @@ public class RequestService {
         AuditEntity auditEntity = audit.getAuditEntity(task.getPointerMasterIdentifier());
 
         HttpEntity<DocumentReference> request = new HttpEntity<>(
-                headerGenerator.generateSecurityHeaders("write", "AMS01", null));
+                headerGenerator.generateSecurityHeaders("write", requestingOrganisation, null));
 
         // [baseUrl]/DocumentReference?subject=[https://demographics.spineservices.nhs.uk/STU3/Patient/[nhsNumber]&identifier=[system]|[value]
         String url = nrlsGetPointersUrl + nrlsGetPointersUrlSubject + task.getSubject().getNhsNumber()

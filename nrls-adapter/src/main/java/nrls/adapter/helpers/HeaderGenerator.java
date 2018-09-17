@@ -20,6 +20,10 @@ public class HeaderGenerator {
 	private String fromAsid;
 	@Value("${spine.asid}")
 	private String toAsid;
+	@Value("${nrls.api.issuer}")
+	private String issuer;
+	@Value("${nrls.api.audience}")
+	private String audience;
 
 	public HttpHeaders generateSecurityHeaders(String scope, String odsCode, String userId) {
 		HttpHeaders headers = new HttpHeaders();
@@ -38,9 +42,9 @@ public class HeaderGenerator {
 	// Provider Validation
 	// No specific validation rules apply.
 	public String generateProviderToken(String scope, String odsCode) {
-		String jws = Jwts.builder().setHeaderParam("typ", "JWT").setIssuer("https://demonstrator.com")
+		String jws = Jwts.builder().setHeaderParam("typ", "JWT").setIssuer(issuer)
 				.setSubject("https://fhir.nhs.uk/Id/accredited-system|" + fromAsid)
-				.setAudience("https://nrls.com/fhir/documentreference")
+				.setAudience(audience)
 				.setExpiration(Date.from(Instant.now().plus(5, ChronoUnit.MINUTES))).setIssuedAt(new Date())
 				.claim("reason_for_request", "directcare").claim("scope", "patient/DocumentReference." + scope)
 				.claim("requesting_system", "https://fhir.nhs.uk/Id/accredited-system|" + fromAsid)
@@ -51,9 +55,9 @@ public class HeaderGenerator {
 	// Consumer Validation
 	// In the context of a Consumer request the requesting_user claim is mandatory.
 	public String generateConsumerToken(String scope, String odsCode, String userId) {
-		String jws = Jwts.builder().setHeaderParam("typ", "JWT").setIssuer("https://demonstrator.com")
+		String jws = Jwts.builder().setHeaderParam("typ", "JWT").setIssuer(issuer)
 				.setSubject("https://fhir.nhs.uk/Id/sds-role-profile-id|" + userId)
-				.setAudience("https://nrls.com/fhir/documentreference")
+				.setAudience(audience)
 				.setExpiration(Date.from(Instant.now().plus(5, ChronoUnit.MINUTES))).setIssuedAt(new Date())
 				.claim("reason_for_request", "directcare").claim("scope", "patient/DocumentReference." + scope)
 				.claim("requesting_system", "https://fhir.nhs.uk/Id/accredited-system|" + fromAsid)
