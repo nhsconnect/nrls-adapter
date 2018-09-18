@@ -18,6 +18,9 @@ public class HeaderGeneratorTests {
 	public void before() {
 		ReflectionTestUtils.setField(headerGenerator, "fromAsid", "200000000117");
 		ReflectionTestUtils.setField(headerGenerator, "toAsid", "999999999999");
+		ReflectionTestUtils.setField(headerGenerator, "issuer", "https://demonstrator.com");
+		ReflectionTestUtils.setField(headerGenerator, "audience", "https://nrls.com/fhir/documentreference");
+		
 
 	}
 
