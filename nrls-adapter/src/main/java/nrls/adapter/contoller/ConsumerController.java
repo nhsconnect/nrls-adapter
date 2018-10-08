@@ -41,6 +41,9 @@ public class ConsumerController {
 	
 	@Value("${adapter.asid}")
 	private String fromAsid;
+	
+	@Value("${nrls.api.requesting.organisation}")
+	private String odsId;
 
 	private final XStream xstream;
 
@@ -57,8 +60,8 @@ public class ConsumerController {
 
 		loggingService.consumerIdentifier = sessionId;
 		AuditEntity auditEntity = audit.getAuditEntity(sessionId);
-		auditEntity.setConsumerRequestData(RequestType.CONSUMER, nhsNumber, userId, sessionId,
-				request.getRequestURL() + "?" + request.getQueryString(), fromAsid);
+		auditEntity.setConsumerRequestData(RequestType.CONSUMER, nhsNumber, odsId, userId, sessionId,
+				request.getMethod() + ": " + request.getRequestURL() + "?" + request.getQueryString(), fromAsid);
 
 		ResponseEntity<?> response = requestService.performGet(new EprRequest(sessionId, userId, nhsNumber, pointerType), false);
 		auditEntity.setNrlsAdapterResponse(xstream.toXML(response));
@@ -75,8 +78,8 @@ public class ConsumerController {
 		
 		loggingService.consumerIdentifier = sessionId;
 		AuditEntity auditEntity = audit.getAuditEntity(sessionId);
-		auditEntity.setConsumerRequestData(RequestType.CONSUMER, nhsNumber, userId, sessionId,
-				request.getRequestURL() + "?" + request.getQueryString(), fromAsid);
+		auditEntity.setConsumerRequestData(RequestType.CONSUMER, nhsNumber, odsId, userId, sessionId,
+				request.getMethod() + ": " + request.getRequestURL() + "?" + request.getQueryString(), fromAsid);
 
 		ResponseEntity<?> response = requestService.performGet(new EprRequest(sessionId, userId, nhsNumber), true);
 		auditEntity.setNrlsAdapterResponse(xstream.toXML(response));

@@ -1,5 +1,7 @@
 package nrls.adapter.services;
 
+import java.util.Date;
+
 import org.hl7.fhir.dstu3.model.DocumentReference;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -80,6 +82,7 @@ public class RequestService {
                 String.class);
 
         auditEntity.setNrlsResponse(xstream.toXML(response));
+        auditEntity.setNrlsResponseTimeDate(new Date().toGMTString());
         auditEntity.setResponseCode(response.getStatusCode());
         if (response.getStatusCode() == HttpStatus.CREATED) {
             auditEntity.setSuccess(true);
@@ -104,6 +107,7 @@ public class RequestService {
         ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.DELETE, request, String.class);
 
         auditEntity.setNrlsResponse(xstream.toXML(response));
+        auditEntity.setNrlsResponseTimeDate(new Date().toGMTString());
         auditEntity.setResponseCode(response.getStatusCode());
         if (response.getStatusCode() == HttpStatus.OK) {
             auditEntity.setSuccess(true);
@@ -133,6 +137,7 @@ public class RequestService {
                 request, String.class);
 
         auditEntity.setNrlsResponse(xstream.toXML(response));
+        auditEntity.setNrlsResponseTimeDate(new Date().toGMTString());
         auditEntity.setResponseCode(response.getStatusCode());
         if (response.getStatusCode() == HttpStatus.OK) {
             auditEntity.setSuccess(true);

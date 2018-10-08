@@ -20,16 +20,19 @@ public class AuditEntity {
     private String transactionId;   // Generated GUID
     
     private String userId;              // Id of user sent with request
+    private String odsId;              // Ods Id of user sent with request
     private String fromASID;            // ASID of the request sender
     
     private String nrlsAdapterRequest;  // Request payload recieved by the NRLS adapter
     private String nrlsAdapterResponse; // Response sent back to the consumer of the NRLS adapter
     private String nrlsRequest;         // Request sent by the adapter to the NRLS
     private String nrlsResponse;        // Response recieved by the adapter from the NRLS
+    private String nrlsResponseTimeDate; // Time/Date the response was recieved by the adapter from the NRLS
     
-    public void setConsumerRequestData(RequestType p_type, String p_nhsNumber, String p_userId, String p_sessionId, String p_nrlsAdapterRequest, String p_fromASID){
+    public void setConsumerRequestData(RequestType p_type, String p_nhsNumber, String p_odsId, String p_userId, String p_sessionId, String p_nrlsAdapterRequest, String p_fromASID){
         type = p_type;
         nhsNumber = p_nhsNumber;
+        odsId = p_odsId;
         userId = p_userId;
         id = p_sessionId;
         nrlsAdapterRequest = p_nrlsAdapterRequest;
@@ -97,6 +100,14 @@ public class AuditEntity {
         this.transactionId = transactionId;
     }
 
+    public String getOdsId() {
+        return odsId;
+    }
+
+    public void setOdsId(String odsId) {
+        this.odsId = odsId;
+    }
+    
     public String getUserId() {
         return userId;
     }
@@ -152,5 +163,15 @@ public class AuditEntity {
     public void setType(RequestType type) {
         this.type = type;
     }
+
+	public String getNrlsResponseTimeDate() {
+		return nrlsResponseTimeDate;
+	}
+
+	public void setNrlsResponseTimeDate(String nrlsResponseTimeDate) {
+		this.nrlsResponseTimeDate = nrlsResponseTimeDate;
+	}
+    
+    
     
 }

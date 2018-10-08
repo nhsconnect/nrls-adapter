@@ -51,6 +51,8 @@ public class TaskService {
 	private String failedTaskFileLocation;
 	@Value("${adapter.asid}")
 	private String fromAsid;
+	@Value("${nrls.api.requesting.organisation}")
+	private String odsId;
 	
 	public Path currentFile;
 
@@ -151,7 +153,7 @@ public class TaskService {
 	public boolean processTask(Task task, Report report, ReportDocumentReference reportDocRef) throws Exception {
 		ResponseEntity<?> response = null;
 		AuditEntity auditEntity = audit.getAuditEntity(task.getPointerMasterIdentifier());
-		auditEntity.setConsumerRequestData(RequestType.PROVIDER, task.getSubject().getNhsNumber(), task.getAuthor().getOdsCode(), task.getPointerMasterIdentifier(), xstream.toXML(task), fromAsid);
+		auditEntity.setConsumerRequestData(RequestType.PROVIDER, task.getSubject().getNhsNumber(), task.getAuthor().getOdsCode(), task.getAuthor().getOdsCode(), task.getPointerMasterIdentifier(), xstream.toXML(task), fromAsid);
 		auditEntity.setMessage(currentFile.getFileName() + " - " + FileHelper.formatDate(new Date()));
 
 		if (task.getAction().equals("Create")) {
