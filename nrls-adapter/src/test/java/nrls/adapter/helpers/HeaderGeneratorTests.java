@@ -42,7 +42,7 @@ public class HeaderGeneratorTests {
 		assertEquals(true, jwt.getBody().toString().contains("reason_for_request=directcare"));
 		assertEquals(true, jwt.getBody().toString().contains("scope=patient/DocumentReference.read"));
 		assertEquals(true, jwt.getBody().toString().contains("requesting_system=https://fhir.nhs.uk/Id/accredited-system|200000000117"));
-		assertEquals(true, jwt.getBody().toString().contains("requesting_organisation=https://fhir.nhs.uk/Id/ods-organization-code|AMS01"));
+		assertEquals(true, jwt.getBody().toString().contains("requesting_organization=https://fhir.nhs.uk/Id/ods-organization-code|AMS01"));
 		assertEquals(true, jwt.getBody().toString().contains("requesting_user=https://fhir.nhs.uk/Id/sds-role-profile-id|234234234"));
 	}
 
@@ -64,7 +64,7 @@ public class HeaderGeneratorTests {
 		assertEquals(true, jwt.getBody().toString().contains("reason_for_request=directcare"));
 		assertEquals(true, jwt.getBody().toString().contains("scope=patient/DocumentReference.write"));
 		assertEquals(true, jwt.getBody().toString().contains("requesting_system=https://fhir.nhs.uk/Id/accredited-system|200000000117"));
-		assertEquals(true, jwt.getBody().toString().contains("requesting_organisation=https://fhir.nhs.uk/Id/ods-organization-code|EXP001"));
+		assertEquals(true, jwt.getBody().toString().contains("requesting_organization=https://fhir.nhs.uk/Id/ods-organization-code|EXP001"));
 	}
 
 }

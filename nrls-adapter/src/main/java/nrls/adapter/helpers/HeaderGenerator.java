@@ -48,7 +48,7 @@ public class HeaderGenerator {
 				.setExpiration(Date.from(Instant.now().plus(5, ChronoUnit.MINUTES))).setIssuedAt(new Date())
 				.claim("reason_for_request", "directcare").claim("scope", "patient/DocumentReference." + scope)
 				.claim("requesting_system", "https://fhir.nhs.uk/Id/accredited-system|" + fromAsid)
-				.claim("requesting_organisation", "https://fhir.nhs.uk/Id/ods-organization-code|" + odsCode).compact();
+				.claim("requesting_organization", "https://fhir.nhs.uk/Id/ods-organization-code|" + odsCode).compact();
 		return jws;
 	}
 
@@ -61,7 +61,7 @@ public class HeaderGenerator {
 				.setExpiration(Date.from(Instant.now().plus(5, ChronoUnit.MINUTES))).setIssuedAt(new Date())
 				.claim("reason_for_request", "directcare").claim("scope", "patient/DocumentReference." + scope)
 				.claim("requesting_system", "https://fhir.nhs.uk/Id/accredited-system|" + fromAsid)
-				.claim("requesting_organisation", "https://fhir.nhs.uk/Id/ods-organization-code|" + odsCode)
+				.claim("requesting_organization", "https://fhir.nhs.uk/Id/ods-organization-code|" + odsCode)
 				.claim("requesting_user", "https://fhir.nhs.uk/Id/sds-role-profile-id|" + userId).compact();
 		return jws;
 	}
