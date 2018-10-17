@@ -7,7 +7,6 @@ import java.security.KeyStore;
 
 import org.apache.http.client.HttpClient;
 import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
-import org.apache.http.conn.ssl.TrustSelfSignedStrategy;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.ssl.SSLContextBuilder;
 import org.springframework.beans.factory.annotation.Value;
@@ -16,6 +15,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.http.client.ClientHttpRequestFactory;
 import org.springframework.http.client.ClientHttpResponse;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
+import org.springframework.util.ResourceUtils;
 import org.springframework.web.client.ResponseErrorHandler;
 import org.springframework.web.client.RestTemplate;
 
@@ -28,6 +28,11 @@ public class SslConfig {
     @Value("${server.ssl.key-store-password}")
     private String keystorePassword;
     
+    @Value("${server.ssl.trust-store}")
+    private String truststorePath;
+    @Value("${server.ssl.trust-store-password}")
+    private String truststorePassword;
+    
     @Bean
     public RestTemplate getRestTemplate() {
         
@@ -38,7 +43,7 @@ public class SslConfig {
 
             SSLConnectionSocketFactory socketFactory = new SSLConnectionSocketFactory(
                     new SSLContextBuilder()
-                            .loadTrustMaterial(null, new TrustSelfSignedStrategy())
+                            .loadTrustMaterial(ResourceUtils.getFile(truststorePath), truststorePassword.toCharArray())
                             .loadKeyMaterial(keyStore, keystorePassword.toCharArray())
                             .build());
 
