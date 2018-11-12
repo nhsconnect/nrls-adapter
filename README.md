@@ -4,9 +4,7 @@ Consumer and Provider NRLS adapters
 ## nrls-adapter installation instructions (installing as a windows service):
  - Download the latest release from [here](https://github.com/nhsconnect/nrls-adapter/releases)
  - Extract the folder into a working directory.
- - Open "Command prompt" or your chosen alternative.
- - Navigate to the working directory.
- - Run the following commands:
+ - Do the following:
    - `open start.bat` - to install and start the service.
    - `open stop.bat` - to stop and uninstall the service.
 ## nrls-adapter provider details
