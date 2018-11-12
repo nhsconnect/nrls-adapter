@@ -7,10 +7,8 @@ Consumer and Provider NRLS adapters
  - Open "Command prompt" or your chosen alternative.
  - Navigate to the working directory.
  - Run the following commands:
-   - `nrls-adpater.exe install` - to install the service.
-   - `nrls-adapter.exe start` - to start the service.
-   - `nrls-adapter.exe stop` - to stop the service.
-   - `nrls-adapter.exe uninstall` - to uninstall the service.
+   - `open start.bat` - to install and start the service.
+   - `open stop.bat` - to stop and uninstall the service.
 ## nrls-adapter provider details
 - Tasks file name must conform to the following format: "NrlsTasks_YYYY-MM-DD.xml" as the date is used to determine the order in which the files should be processed. (The oldest files are processed first.)
 - `provider.enabled=true` should be set to true.
