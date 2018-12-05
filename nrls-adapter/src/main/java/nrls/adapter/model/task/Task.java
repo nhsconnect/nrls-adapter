@@ -24,9 +24,9 @@ public class Task {
 	private Type type;
 	@XStreamAlias("subject")
 	private Subject subject;
-	@XStreamAlias("author")
+	@XStreamAlias("Author")
 	private Author author;
-	@XStreamAlias("custodian")
+	@XStreamAlias("Custodian")
 	private Custodian custodian;
 	@XStreamAlias("content")
 	private Content content;
